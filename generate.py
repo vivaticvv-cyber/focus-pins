@@ -95,6 +95,7 @@ def generate(prompt, dest):
 
 
 def main():
+    os.makedirs("images", exist_ok=True)
     rows = list(csv.DictReader(open("pins.csv", encoding="utf-8")))
     done = 0
     for r in rows:
