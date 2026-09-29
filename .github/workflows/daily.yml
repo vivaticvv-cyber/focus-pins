@@ -9,16 +9,20 @@ jobs:
   generate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - run: pip install -r requirements.txt
       - run: python generate.py
         env:
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-          PINS_PER_RUN: "3"
+          PINS_PER_RUN: "2"
+          HF_MAX_PER_RUN: "1"
       - name: Commit results
+        if: always()
         run: |
           git config user.name "focus-bot"
           git config user.email "focus-bot@users.noreply.github.com"
