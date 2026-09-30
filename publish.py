@@ -585,6 +585,12 @@ def lint(csv_path="pins.csv", images_dir="images"):
         seen_desc.setdefault(d, rid)
         if (r.get("board") or "").strip() == "":
             msgs.append("не указана доска")
+        scene = (r.get("scene_prompt") or "").lower()
+        bad_words = [w for w in ("laptop", "screen", "phone", "computer", "hand ", "hands", "person", "people",
+                                 "man ", "woman", "girl", "boy ", "human", "face") if w in scene + " "]
+        if bad_words:
+            msgs.append("в сцене нежелательные слова: " + ", ".join(w.strip() for w in bad_words)
+                        + " (используйте {mascot} или предмет-метафору)")
         if status(r) in ("ready", "scheduled", "published") and not Path(images_dir, f"{rid}.jpg").exists() \
                 and status(r) == "ready":
             msgs.append(f"status=ready, но нет {images_dir}/{rid}.jpg")

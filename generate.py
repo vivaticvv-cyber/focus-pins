@@ -121,7 +121,8 @@ STYLES = {
         palette="Color palette: sky gradient #F9D5B5 to #F5A98A, hills #5C8A8E, #3F6570 and #2B4A57, sun #FFE7A8.",
         ink="#2B4A57", plate="#FFF3E4", accent="#F5A98A", fonts=["poppins", "fredoka"]),
     "felt": dict(
-        medium="Needle-felted wool miniature scene with fuzzy fibers, tiny stitched details and soft rounded forms, photographed as macro toy photography with shallow depth of field.",
+        medium="Needle-felted wool miniature scene with fuzzy fibers, tiny stitched details and soft rounded forms, photographed as macro toy photography.",
+        focus="The whole scene is in crisp sharp focus.",
         light="Soft warm window light with a gentle glow.",
         palette="Color palette: cream #FBF0E2, teal #6FA8A8, coral #EE8F72, butter yellow #F6D77A, blush pink #F3B9A8.",
         ink="#2F5560", plate="#FFF6EA", accent="#EE8F72", fonts=["sniglet", "fredoka"]),
@@ -131,7 +132,8 @@ STYLES = {
         palette="Color palette: background gradient #FBE3D3 to #F7C7B0, teal #3E8E9A, coral #F26D5B, sunny yellow #FFD45E.",
         ink="#24525E", plate="#FFF3E8", accent="#F26D5B", fonts=["fredoka", "lilita"]),
     "diorama": dict(
-        medium="Tiny handmade miniature diorama of painted wood, moss and clay, photographed as macro tilt-shift photography with shallow depth of field.",
+        medium="Tiny handmade miniature diorama of painted wood, moss and clay, photographed as a macro product photo.",
+        focus="The entire scene from the character to the back of the wall is in crisp sharp focus with deep depth of field.",
         light="Warm golden light streaming from the side with soft long shadows.",
         palette="Color palette: warm wood #C99A6B, sage green #9DB89A, cream #F6E8D4, teal #4F7A8C, soft coral #E8956B.",
         ink="#3A4F47", plate="#FFF5E4", accent="#E8956B", fonts=["sniglet", "poppins"]),
@@ -142,6 +144,7 @@ STYLES = {
         ink="#1F4E5F", plate="#FFF2DE", accent="#EE7F5E", fonts=["lilita", "archivo"]),
     "knit": dict(
         medium="Cozy knitted yarn miniature with chunky wool stitches and fuzzy texture, handmade amigurumi look, macro photography.",
+        focus="The whole scene is in crisp sharp focus.",
         light="Soft diffused daylight with a warm tone.",
         palette="Color palette: oatmeal cream #F3E6D3, dusty teal #6E9EA3, coral #E98C74, mustard #E8B85A, soft pink #F0BFB0.",
         ink="#3D5A63", plate="#FFF7EC", accent="#E98C74", fonts=["sniglet", "fredoka"]),
@@ -159,8 +162,8 @@ STYLES = {
 # Рабочий набор (после демо оставить лучшие). Слабые стили (watercolor, geometric, lineart, hills, collage)
 # остаются описанными выше, но в ротацию не входят.
 STYLE_ORDER = ["clay3d", "shadowbox", "felt", "glossy3d", "papercraft", "diorama", "gouache", "isometric",
-               "dusk", "riso"]
-DEMO_EXTRA = ["night", "knit"]   # только для демо; слабые стили (watercolor, geometric, collage, lineart, hills) не показываются
+               "dusk"]
+DEMO_EXTRA = ["night", "knit", "riso"]   # только для демо; слабые стили (watercolor, geometric, collage, lineart, hills) не показываются
 LAYOUTS = ["plate_top", "bare_top", "banner_bottom", "labels_top", "plate_bottom"]
 ZONE = {"plate_top": "top", "bare_top": "top", "labels_top": "top",
         "banner_bottom": "bottom", "plate_bottom": "bottom"}
@@ -171,9 +174,17 @@ COMP = {
 }
 
 
+# Единый персонаж-талисман бренда: в сценах пишется токеном {mascot}. Светлое тело контрастирует со стеной/фоном,
+# большие глаза и румянец — чтобы лицо выходило милым, а не «одутловатым».
+MASCOT = ("a small round bean-shaped creature with a soft pale cream body, two big round glossy dark eyes, "
+          "rosy pink cheeks, a tiny gentle smile and little stubby feet")
+
+
 def build_prompt(scene, style, zone):
     """Проза, предмет первым, только позитивные формулировки (klein не понимает отрицаний)."""
-    return f"{scene.strip().rstrip('.')}. {style['medium']} {style['light']} {style['palette']} {COMP[zone]}"
+    scene = scene.replace("{mascot}", MASCOT).strip().rstrip(".")
+    focus = f" {style['focus']}" if style.get("focus") else ""
+    return f"{scene}. {style['medium']}{focus} {style['light']} {style['palette']} {COMP[zone]}"
 
 
 def pick_style_layout(n, row):
