@@ -1,3 +1,4 @@
-gradio_client
-pillow
 requests
+pillow
+gradio_client
+tzdata
