@@ -1,30 +1,87 @@
-name: Generate pins
+name: Daily pins
+
+# Каждый день: 1) запланировать в Buffer пины СЕГОДНЯШНЕГО дня, 2) пополнить «склад» картинок.
+# 03:30 UTC = 06:30 (лето) / 05:30 (зима) по Киеву — до начала окна публикации 08:00.
 on:
   schedule:
-    - cron: "0 7 * * *"   # каждый день 07:00 UTC (~10:00 Киев)
+    - cron: "30 3 * * *"
   workflow_dispatch:
+    inputs:
+      mode:
+        description: "run = как по расписанию; dry-run = показать план без отправки; check = проверить связь с Buffer; lint = проверить pins.csv"
+        type: choice
+        options: [run, dry-run, check, lint]
+        default: run
+      stock_days:
+        description: "Склад на N дней вперёд (пусто = 3). Для первого запуска можно 5"
+        required: false
+        default: ""
+
+concurrency:
+  group: pins
+  cancel-in-progress: false
+
 permissions:
   contents: write
+
+env:
+  PYTHONDONTWRITEBYTECODE: "1"
+  MODE: ${{ inputs.mode || 'run' }}
+
 jobs:
-  generate:
+  pins:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
+          cache: pip
       - run: pip install -r requirements.txt
-      - run: python generate.py
+
+      # 1. Сначала публикация (планирование в Buffer)
+      - name: Публикация в Buffer
+        env:
+          BUFFER_TOKEN: ${{ secrets.BUFFER_TOKEN }}
+          START_DATE: ${{ vars.START_DATE }}
+          MAX_PER_DAY: ${{ vars.MAX_PER_DAY }}
+        run: |
+          case "$MODE" in
+            run)     python publish.py ;;
+            dry-run) python publish.py --dry-run ;;
+            check)   python publish.py --check ;;
+            lint)    python publish.py --lint ;;
+          esac
+
+      - name: Сохранить статусы pins.csv
+        if: ${{ !cancelled() }}
+        run: |
+          git config user.name "focus-bot"
+          git config user.email "focus-bot@users.noreply.github.com"
+          git add pins.csv
+          git diff --cached --quiet || git commit -m "pins: publish statuses"
+          git pull --rebase --autostash || true
+          git push || (git pull --rebase --autostash && git push) || true
+
+      # 2. Потом пополнение склада (даже если публикация упала — склад всё равно нужен)
+      - name: Пополнить склад картинок
+        if: ${{ !cancelled() && env.MODE == 'run' }}
         env:
           CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-          PINS_PER_RUN: "2"
-          HF_MAX_PER_RUN: "1"
-      - name: Commit results
-        if: always()
+          START_DATE: ${{ vars.START_DATE }}
+          MAX_PER_DAY: ${{ vars.MAX_PER_DAY }}
+          STOCK_DAYS: ${{ inputs.stock_days || vars.STOCK_DAYS }}
+        run: python generate.py
+
+      - name: Сохранить картинки и pins.csv
+        if: ${{ !cancelled() && env.MODE == 'run' }}
         run: |
           git config user.name "focus-bot"
           git config user.email "focus-bot@users.noreply.github.com"
-          git add -A
-          git diff --cached --quiet || (git commit -m "pins: generated" && git push)
+          git add pins.csv images
+          git diff --cached --quiet || git commit -m "pins: stock images"
+          git pull --rebase --autostash || true
+          git push || (git pull --rebase --autostash && git push)
