@@ -120,9 +120,47 @@ STYLES = {
         light="Low golden sun glow on the horizon.",
         palette="Color palette: sky gradient #F9D5B5 to #F5A98A, hills #5C8A8E, #3F6570 and #2B4A57, sun #FFE7A8.",
         ink="#2B4A57", plate="#FFF3E4", accent="#F5A98A", fonts=["poppins", "fredoka"]),
+    "felt": dict(
+        medium="Needle-felted wool miniature scene with fuzzy fibers, tiny stitched details and soft rounded forms, photographed as macro toy photography with shallow depth of field.",
+        light="Soft warm window light with a gentle glow.",
+        palette="Color palette: cream #FBF0E2, teal #6FA8A8, coral #EE8F72, butter yellow #F6D77A, blush pink #F3B9A8.",
+        ink="#2F5560", plate="#FFF6EA", accent="#EE8F72", fonts=["sniglet", "fredoka"]),
+    "glossy3d": dict(
+        medium="Glossy 3D render of smooth puffy rounded objects with satin plastic surfaces and soft translucent glow, polished studio product render.",
+        light="Soft studio light with a warm rim light and a gentle bloom.",
+        palette="Color palette: background gradient #FBE3D3 to #F7C7B0, teal #3E8E9A, coral #F26D5B, sunny yellow #FFD45E.",
+        ink="#24525E", plate="#FFF3E8", accent="#F26D5B", fonts=["fredoka", "lilita"]),
+    "diorama": dict(
+        medium="Tiny handmade miniature diorama of painted wood, moss and clay, photographed as macro tilt-shift photography with shallow depth of field.",
+        light="Warm golden light streaming from the side with soft long shadows.",
+        palette="Color palette: warm wood #C99A6B, sage green #9DB89A, cream #F6E8D4, teal #4F7A8C, soft coral #E8956B.",
+        ink="#3A4F47", plate="#FFF5E4", accent="#E8956B", fonts=["sniglet", "poppins"]),
+    "shadowbox": dict(
+        medium="Layered paper-cut lightbox shadowbox with many stacked cut paper layers, deep depth and crisp paper edges.",
+        light="Warm golden light glowing from behind the layers and spilling between them.",
+        palette="Color palette: deep teal #1F4E5F, blue #3F7C8C, cream #F7E6CF, coral #EE7F5E, glowing amber #FFC46B.",
+        ink="#1F4E5F", plate="#FFF2DE", accent="#EE7F5E", fonts=["lilita", "archivo"]),
+    "knit": dict(
+        medium="Cozy knitted yarn miniature with chunky wool stitches and fuzzy texture, handmade amigurumi look, macro photography.",
+        light="Soft diffused daylight with a warm tone.",
+        palette="Color palette: oatmeal cream #F3E6D3, dusty teal #6E9EA3, coral #E98C74, mustard #E8B85A, soft pink #F0BFB0.",
+        ink="#3D5A63", plate="#FFF7EC", accent="#E98C74", fonts=["sniglet", "fredoka"]),
+    "isometric": dict(
+        medium="Isometric 3D miniature cutaway scene with soft rounded blocks, smooth matte materials and tiny props, polished render.",
+        light="Soft studio light from the upper left with gentle shadows and a faint glow.",
+        palette="Color palette: peach #F9DCC8, teal #5FA3AE, deep blue #3B6478, coral #F0876A, warm yellow #FFD980.",
+        ink="#2C5563", plate="#FFF4EA", accent="#F0876A", fonts=["poppins", "fredoka"]),
+    "dusk": dict(
+        medium="Dreamy smooth 3D scene with soft rounded shapes, gentle volumetric light rays and a magical calm atmosphere.",
+        light="Glowing warm light source in a cool violet-blue dusk with soft bloom.",
+        palette="Color palette: deep indigo #2B3A67, violet #6B5B95, teal #4F8FA0, glowing peach #FFB48A, warm yellow #FFDA8A.",
+        ink="#FFF1DE", plate="#2B3A67", accent="#FFB48A", fonts=["poppins", "dmserif"]),
 }
-STYLE_ORDER = ["papercraft", "night", "riso", "clay3d", "watercolor", "geometric", "gouache",
-               "collage", "lineart", "hills"]
+# Рабочий набор (после демо оставить лучшие). Слабые стили (watercolor, geometric, lineart, hills, collage)
+# остаются описанными выше, но в ротацию не входят.
+STYLE_ORDER = ["clay3d", "shadowbox", "felt", "glossy3d", "papercraft", "diorama", "gouache", "isometric",
+               "dusk", "riso"]
+DEMO_EXTRA = ["night", "knit"]   # только для демо; слабые стили (watercolor, geometric, collage, lineart, hills) не показываются
 LAYOUTS = ["plate_top", "bare_top", "banner_bottom", "labels_top", "plate_bottom"]
 ZONE = {"plate_top": "top", "bare_top": "top", "labels_top": "top",
         "banner_bottom": "bottom", "plate_bottom": "bottom"}
@@ -401,12 +439,13 @@ def run_test(rows):
 
 
 def run_demo(rows):
-    """По одной картинке на каждый стиль: сравнить художественные направления."""
+    """По одной картинке на каждый стиль (рабочие + запасные) на ОДНОМ сюжете — честное сравнение стилей."""
     shutil.rmtree("test", ignore_errors=True)
     os.makedirs("test", exist_ok=True)
     state, done, paths = {"cf_ok": True, "hf_used": 0}, 0, []
-    for i, skey in enumerate(STYLE_ORDER):
-        row = dict(rows[i % len(rows)])
+    all_styles = STYLE_ORDER + [k for k in DEMO_EXTRA if k in STYLES and k not in STYLE_ORDER]
+    for i, skey in enumerate(all_styles):
+        row = dict(rows[0])
         row["style"] = skey
         row["layout"] = LAYOUTS[i % len(LAYOUTS)]
         n = int(row["id"])
