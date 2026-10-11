@@ -1,0 +1,62 @@
+name: Social images
+
+# Картинки для Facebook и X (отдельно от пинов Pinterest). Запускается вручную.
+#   demo  = по 4 пробные картинки на сеть (test/social_demo/ + contact_sheet.jpg)
+#   stock = сделать картинки для строк social.csv со status=new (count штук)
+#   lint  = проверить social.csv
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "demo = пробные картинки; stock = картинки для строк new; lint = проверка social.csv"
+        type: choice
+        options: [demo, stock, lint]
+        default: demo
+      count:
+        description: "Для stock: сколько картинок сделать за запуск (пусто = 12)"
+        required: false
+        default: ""
+
+concurrency:
+  group: pins
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+env:
+  PYTHONDONTWRITEBYTECODE: "1"
+
+jobs:
+  social:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Run
+        env:
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          HF_MAX_PER_RUN: "0"
+          MODE: ${{ inputs.mode }}
+          COUNT: ${{ inputs.count }}
+        run: |
+          case "$MODE" in
+            demo)  python social.py --demo ;;
+            stock) python social.py --stock "${COUNT:-12}" ;;
+            lint)  python social.py --lint ;;
+          esac
+      - name: Commit
+        if: ${{ !cancelled() }}
+        run: |
+          git config user.name "focus-bot"
+          git config user.email "focus-bot@users.noreply.github.com"
+          git add test/social_demo images/social social.csv
+          git diff --cached --quiet || git commit -m "social: images"
+          git pull --rebase --autostash || true
+          git push || (git pull --rebase --autostash && git push)
