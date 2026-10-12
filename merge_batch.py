@@ -1,6 +1,9 @@
 """Безопасно добавить новую партию строк (pins_batch_N.csv) в pins.csv, не трогая статусы уже сделанных пинов.
 
 Запуск:  python merge_batch.py          (в GitHub: Actions -> «Merge pins batch» -> Run workflow)
+Файлы pins_patch_N.csv ЗАМЕНЯЮТ существующие строки с теми же id, но только если строка ещё имеет status=new
+(строки в работе — ready с картинкой от нейросети, scheduled, published — не трогаются, об этом пишется в журнал);
+картинка images/<id>.jpg для строк патча должна быть уже загружена.
 Что делает:
   1) берёт все файлы pins_batch_*.csv в корне репозитория;
   2) пропускает id, которые уже есть в pins.csv (повторный запуск ничего не дублирует);
@@ -19,16 +22,43 @@ import tempfile
 import publish as P
 
 
+def apply_patches(rows, header):
+    """Замена строк со status=new строками из pins_patch_*.csv. Возвращает (кол-во замен, проблемы, обработанные файлы)."""
+    done, problems, used = 0, 0, []
+    by_id = {int(r["id"]): r for r in rows}
+    for fn in sorted(glob.glob("pins_patch_*.csv")):
+        patch, _ = P.load_rows(fn)
+        for pr in patch:
+            rid = int(pr["id"])
+            cur = by_id.get(rid)
+            if cur is None:
+                print(f"{fn}: id {rid} нет в pins.csv — пропуск")
+                continue
+            if P.status(cur) != "new":
+                print(f"{fn}: id {rid} уже в работе (status={P.status(cur)}) — не заменён")
+                continue
+            if P.status(pr) == "ready" and not os.path.exists(os.path.join("images", f"{rid}.jpg")):
+                print(f"::error::{fn}: для id {rid} нет images/{rid}.jpg — сначала загрузите картинки")
+                problems += 1
+                continue
+            for k in header:
+                cur[k] = pr.get(k, "")
+            done += 1
+        used.append(fn)
+    return done, problems, used
+
+
 def main():
-    files = sorted(glob.glob("pins_batch_*.csv"))
-    if not files:
-        print("Файлов pins_batch_*.csv нет — нечего добавлять.")
-        return 0
     rows, header = P.load_rows("pins.csv")
+    n_patch, prob_patch, patch_files = apply_patches(rows, header)
+    files = sorted(glob.glob("pins_batch_*.csv"))
+    if not files and not patch_files:
+        print("Файлов pins_batch_*.csv и pins_patch_*.csv нет — нечего добавлять.")
+        return 0
     have_ids = {int(r["id"]) for r in rows}
     titles = {(r.get("title") or "").strip().lower() for r in rows}
     descs = {(r.get("description") or "").strip() for r in rows}
-    added_total, problems = [], 0
+    added_total, problems = [], prob_patch
     for fn in files:
         new, _ = P.load_rows(fn)
         fresh = []
@@ -64,13 +94,17 @@ def main():
     if problems:
         print(f"::error::Найдено проблем: {problems}. pins.csv не изменён.")
         return 1
-    if not added_total:
+    if not added_total and not patch_files:
         return 0
     P.save_rows(rows, header, "pins.csv")
     os.makedirs("batches", exist_ok=True)
     for fn, n in added_total:
         shutil.move(fn, os.path.join("batches", os.path.basename(fn)))
         print(f"Добавлено {n} строк из {fn}")
+    for fn in patch_files:
+        shutil.move(fn, os.path.join("batches", os.path.basename(fn)))
+    if patch_files:
+        print(f"Заменено строк патчами: {n_patch}")
     print(f"Теперь в pins.csv {len(rows)} строк.")
     return 0
 

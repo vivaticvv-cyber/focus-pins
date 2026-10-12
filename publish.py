@@ -52,7 +52,7 @@ CONFIG = dict(
                   18: 7, 19: 8, 20: 9, 21: 9, 22: 7, 23: 3},
 
     # --- доски ---
-    PROMO_MIN_GAP=7,                                # между двумя промо-пинами минимум 7 обычных (~1 из 8)
+    PROMO_MIN_GAP=3,                                # между двумя промо-пинами минимум 3 обычных (до ~1 из 4)
 
     # --- ссылки: (url, вес) по типу доски. Итого ≈ 70% pages.dev / ≈ 23% dwshkr / ≈ 7% seqen ---
     LINKS={
@@ -221,6 +221,16 @@ def parse_dt(s):
 def board_kind(name):
     n = (name or "").lower()
     return "promo" if ("planner" in n and "tips" not in n) else "info"
+
+
+def add_utm(link, row):
+    """Добавить метки utm_* к ссылке (если их ещё нет): источник pinterest, номер пина — для аналитики Cloudflare/Gumroad."""
+    from urllib.parse import urlencode
+    if "utm_" in link:
+        return link
+    kind = "product" if board_kind(row.get("board")) == "promo" else "tip"
+    q = urlencode({"utm_source": "pinterest", "utm_medium": "pin", "utm_campaign": kind, "utm_content": str(row.get("id"))})
+    return link + ("&" if "?" in link else "?") + q
 
 
 def choose_link(row):
@@ -527,7 +537,7 @@ def run(mode="run", now=None, client=None, csv_path="pins.csv", images_dir="imag
             continue
         kind = board_kind(r.get("board"))
         board_id = cfg("BOARD_PROMO") if kind == "promo" else cfg("BOARD_INFO")
-        link = choose_link(r)
+        link = add_utm(choose_link(r), r)
         title = clip_title(r.get("pin_title") or r.get("title"), cfg("TITLE_MAX"))
         url = image_url(r["id"])
         line = f"пин {r['id']:>3} [{kind}] {when:%H:%M} -> {link}"
