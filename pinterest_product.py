@@ -175,6 +175,9 @@ WALL = ["high-energy", "low-energy", "battery-full", "calm", "done-enough", "res
 WALL2 = ["high-energy", "low-energy", "empty-tank", "battery-full", "calm", "overwhelm", "hyperfocus", "deep-work",
          "creative", "sunlight", "priority-1", "priority-2", "priority-3", "done-enough", "micro-step"]
 
+WALL3 = ["low-energy", "high-energy", "empty-tank", "battery-full", "calm", "overwhelm", "deep-work", "creative",
+         "sunlight", "youre-fine", "forgive-gap", "start-small", "safe-to-stop", "pause", "body-double", "self-care"]
+
 SPECS = [
     dict(id=56, layout="phone_duo", pal="night", headline="One Task Planner\nfor ADHD", fmt=FMT_TRIAL, strip=STRIP_HTML),
     dict(id=60, layout="page_stickers", pal="cream", page="quickstart", stickers=["start-small", "one-step", "enough-for-today"],
@@ -220,6 +223,34 @@ SPECS = [
          pills=["Slice it", "4 small steps", "Done!"], headline="Slice Big Tasks\nInto Small Steps", fmt=FMT_HTML,
          strip=STRIP_HTML),
     dict(id=147, layout="bundle", pal="cream", headline="ADHD Planner Bundle\nPaper + Screen", fmt=FMT_BUNDLE, strip=STRIP_BUNDLE),
+    # ---- партия 4 (id 164-208)
+    dict(id=164, layout="duo_pages", pal="blush", pages=["weekly", "daily"], stickers=["calm", "done-enough"],
+         headline="ADHD Planner\nPrintable Pages", fmt=FMT_PDF, strip=STRIP_PDF),
+    dict(id=168, layout="fan3", pal="mint", pages=["matrix", "decision", "quickstart"],
+         headline="Executive Function\nPlanner Pages", fmt=FMT_PDF, strip=STRIP_PDF),
+    dict(id=172, layout="page_stickers", pal="blush", page="braindump", stickers=["pause", "one-step", "calm"],
+         side="left", headline="ADHD Brain Dump\nTemplate", fmt=FMT_PDF, strip=STRIP_PDF),
+    dict(id=176, layout="page_stickers", pal="cream", page="weekly", stickers=["done-enough", "calm", "start-small"],
+         side="left", headline="Weekly Planner for\nADHD Brains", fmt=FMT_PDF, strip=STRIP_PDF),
+    dict(id=180, layout="phone_solo", pal="blush", screen="phone1.png", box=(0, 0.1, 1, 0.62),
+         pills=["Battery check", "Kind timer", "Small wins"], headline="ADHD Planner\nThat Works Offline", fmt=FMT_HTML,
+         strip=STRIP_HTML),
+    dict(id=184, layout="sticker_wall", pal="blush", stickers=WALL3, headline="ADHD Sticker Pack\nfor GoodNotes", fmt=FMT_STICK,
+         strip=STRIP_PDF),
+    dict(id=188, layout="closeup", pal="mint", page="mood", box=(0, 0.04, 1, 0.6), stickers=["high-energy", "low-energy"],
+         headline="Mood + Energy Tracker\nfor ADHD", fmt=FMT_PDF, strip=STRIP_PDF),
+    dict(id=192, layout="bundle", pal="mint", headline="PDF + HTML ADHD\nPlanner Bundle", fmt=FMT_BUNDLE,
+         strip=STRIP_BUNDLE),
+    dict(id=196, layout="closeup", pal="cream", page="daily", box=(0, 0.42, 1, 0.98), stickers=["micro-step", "one-step"],
+         headline="ADHD Time Blocking\nPlanner Page", fmt=FMT_PDF, strip=STRIP_PDF),
+    dict(id=200, layout="fan3", pal="cream", pages=["quickstart", "weekly", "braindump"],
+         headline="ADHD Planner\nfor Students", fmt=FMT_PDF, strip=STRIP_PDF),
+    dict(id=204, layout="phone_solo", pal="night", screen="phone1.png", box=(0, 0, 1, 0.5),
+         pills=["One task", "Battery check", "Kind timer"], headline="Free ADHD Planner\nNo Signup", fmt=FMT_TRIAL,
+         strip=STRIP_HTML),
+    dict(id=208, layout="fan3", pal="blush", pages=["daily", "dopamine", "restart"],
+         headline="Undated ADHD Planner\nfor the New Year", fmt="Undated  ·  fillable  ·  A4, A5, Letter",
+         strip=STRIP_PDF),
 ]
 
 

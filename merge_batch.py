@@ -83,7 +83,7 @@ def main():
         with tempfile.TemporaryDirectory() as tmp:
             p = os.path.join(tmp, "check.csv")
             P.save_rows(fresh, header, p)
-            if P.lint(p, images_dir=os.path.join(tmp, "none")):
+            if P.lint(p, images_dir="images"):
                 problems += 1
                 print(f"{fn}: есть замечания lint — партия не добавлена")
                 continue
