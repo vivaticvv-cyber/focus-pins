@@ -4,6 +4,7 @@
 Режимы:
   python generate.py          обычный: докручивает «склад» — держит готовые картинки (status=ready)
                               на STOCK_DAYS дней вперёд по плану publish.py; строки new -> images/N.jpg, status=ready
+                              (в складе считаются только ИНФОРМАЦИОННЫЕ пины; продуктовые делает pinterest_product.py)
   python generate.py --test   первые 3 строки pins.csv -> test/ (pins.csv не меняется)
   python generate.py --demo   по одной картинке на КАЖДЫЙ стиль -> test/demo_*.jpg + contact_sheet.jpg
 Переменные окружения: PINS_PER_RUN (принудительно сделать ровно N картинок), GEN_MAX_PER_RUN (потолок за прогон, 12),
@@ -499,11 +500,13 @@ def main():
         return run_demo(rows)
     os.makedirs("images", exist_ok=True)
     now = P.now_kyiv()
-    ready = sum(1 for r in rows if P.status(r) == "ready")
+    # В складе считаем только ИНФОРМАЦИОННЫЕ готовые пины: продуктовые (промо) готовы заранее
+    # (pinterest_product.py) и ставятся не чаще 1 из 4, поэтому не заменяют обычные.
+    ready = sum(1 for r in rows if P.status(r) == "ready" and P.board_kind(r.get("board")) == "info")
     target = stock_target(rows, now)
     want = int(PINS_PER_RUN) if PINS_PER_RUN else min(max(0, target - ready), GEN_MAX_PER_RUN)
-    print(f"Склад: готово {ready}, нужно {target} (на {P.cfg('STOCK_DAYS')} дн. вперёд + остаток сегодня); "
-          f"сделать сейчас: {want}")
+    print(f"Склад (информационные пины): готово {ready}, нужно {target} "
+          f"(на {P.cfg('STOCK_DAYS')} дн. вперёд + остаток сегодня); сделать сейчас: {want}")
     state, done = {"cf_ok": True, "hf_used": 0}, 0
     for r in sorted(rows, key=lambda x: int(x["id"])):
         if done >= want:
