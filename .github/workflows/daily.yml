@@ -1,6 +1,7 @@
 name: Daily pins
 
-# Каждый день: 1) запланировать в Buffer пины СЕГОДНЯШНЕГО дня (по Киеву), 2) пополнить «склад» картинок.
+# Каждый день: 1) запланировать в Buffer пины СЕГОДНЯШНЕГО дня (по Киеву), 2) пополнить «склад» картинок,
+# 3) повторить публикацию, если после пополнения склада появились готовые пины.
 # GitHub часто опаздывает с запуском по расписанию (до 7 часов), поэтому запусков два:
 #   22:17 UTC = 01:17 (лето) / 00:17 (зима) по Киеву — уже новая дата, пины ставятся на весь день с 08:00;
 #   03:30 UTC = 06:30 (лето) / 05:30 (зима) по Киеву — запасной.
@@ -44,8 +45,10 @@ jobs:
           cache: pip
       - run: pip install -r requirements.txt
 
-      # 1. Сначала публикация (планирование в Buffer)
+      # 1. Сначала публикация (планирование в Buffer).
+      #    В режиме run сбой здесь не красит запуск: итог даст повторная публикация после пополнения склада.
       - name: Публикация в Buffer
+        continue-on-error: ${{ env.MODE == 'run' }}
         env:
           BUFFER_TOKEN: ${{ secrets.BUFFER_TOKEN }}
           START_DATE: ${{ vars.START_DATE }}
@@ -89,3 +92,23 @@ jobs:
           git diff --cached --quiet || git commit -m "pins: stock images"
           git pull --rebase --autostash || true
           git push || (git pull --rebase --autostash && git push)
+
+      # 3. Повторная публикация: если на шаге 1 не было готовых пинов, а склад теперь пополнен.
+      #    Ничего не дублирует (уже запланированное на сегодня учитывается). Красный итог — только если и теперь не вышло.
+      - name: Публикация в Buffer (после пополнения склада)
+        if: ${{ !cancelled() && env.MODE == 'run' }}
+        env:
+          BUFFER_TOKEN: ${{ secrets.BUFFER_TOKEN }}
+          START_DATE: ${{ vars.START_DATE }}
+          MAX_PER_DAY: ${{ vars.MAX_PER_DAY }}
+        run: python publish.py
+
+      - name: Сохранить статусы pins.csv (после повторной публикации)
+        if: ${{ !cancelled() && env.MODE == 'run' }}
+        run: |
+          git config user.name "focus-bot"
+          git config user.email "focus-bot@users.noreply.github.com"
+          git add pins.csv
+          git diff --cached --quiet || git commit -m "pins: publish statuses"
+          git pull --rebase --autostash || true
+          git push || (git pull --rebase --autostash && git push) || true
