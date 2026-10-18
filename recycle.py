@@ -65,7 +65,8 @@ def pick_sources(rows, min_age_days, now, exclude, need):
 def recycle_pins(now, dry=False, path="pins.csv"):
     rows, header = P.load_rows(path)
     need_total = sum(P.pins_for_day((now + timedelta(days=i)).date()) for i in range(0, PINS_RUNWAY_DAYS))
-    have = sum(1 for r in rows if P.status(r) in ("new", "ready"))
+    # как в generate.py: считаем только ИНФОРМАЦИОННЫЕ строки (продуктовые ready ставятся не чаще 1 из 4 и не заменяют обычные)
+    have = sum(1 for r in rows if P.status(r) in ("new", "ready") and P.board_kind(r.get("board")) == "info")
     if have >= need_total:
         print(f"[pins] запас достаточен: {have} строк на {need_total} пинов за {PINS_RUNWAY_DAYS} дн.")
         return 0
