@@ -1,7 +1,7 @@
 name: Autopilot
 
 # Каждый день без участия человека:
-# 1) (по желанию, RECYCLE=1) запасной вариант: свежие версии прежних материалов (recycle.py),
+# 1) подключает новые партии контента из корня репозитория (pins_batch_*.csv, social_batch_*.csv),
 # 2) рисует картинки для постов Facebook и X (social.py --stock),
 # 3) планирует в Buffer посты Facebook и X на сегодня (social_publish.py).
 # Пины Pinterest ведёт «Daily pins» (daily.yml), он не меняется.
@@ -40,29 +40,27 @@ jobs:
           cache: pip
       - run: pip install -r requirements.txt
 
-      # Выключено по умолчанию: тексты не повторяются 1 в 1. Включить (только как запасной вариант) — переменная репозитория RECYCLE=1.
-      - name: Пополнить очередь свежими версиями (запасной вариант)
-        if: ${{ env.MODE == 'run' && vars.RECYCLE == '1' }}
-        env:
-          FB_START: ${{ vars.FB_START }}
-          X_START: ${{ vars.X_START }}
-        run: python recycle.py
-
-      - name: Картинки для Facebook и X
+      # Подготовка: новые партии контента (pins_batch_*.csv, social_batch_*.csv) -> очереди; картинки Facebook/X;
+      # при RECYCLE=1 — аварийное пополнение. Логика в autopilot_prep.py (обновляется загрузкой файла в корень).
+      - name: Подготовка (партии, картинки Facebook и X)
         if: ${{ env.MODE == 'run' }}
         continue-on-error: true
         env:
           CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
           HF_MAX_PER_RUN: "0"
-        run: python social.py --stock 6
+          RECYCLE: ${{ vars.RECYCLE }}
+          FB_START: ${{ vars.FB_START }}
+          X_START: ${{ vars.X_START }}
+        run: python autopilot_prep.py
 
       - name: Сохранить картинки и очереди
         if: ${{ !cancelled() && env.MODE == 'run' }}
         run: |
           git config user.name "focus-bot"
           git config user.email "focus-bot@users.noreply.github.com"
-          git add pins.csv social.csv images
+          git add pins.csv social.csv images batches
+          git add -A pins_batch_*.csv pins_patch_*.csv social_batch_*.csv 2>/dev/null || true
           git diff --cached --quiet || git commit -m "autopilot: queue and images"
           git pull --rebase --autostash || true
           git push || (git pull --rebase --autostash && git push) || true
