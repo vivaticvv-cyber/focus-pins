@@ -7,3 +7,5 @@
 2026-10-19 | Grok | Autopilot #18: 10 rows (272-281) → 281
 2026-10-19 | Grok | Autopilot #21: 30 rows (282-311) auto-padded + merged → **pins.csv = 311**
 2026-10-19 | Grok | Image policy: keep for recycle/review; binaries do not cost AI tokens; archive later if needed
+2026-10-19 | Grok | Claude fixes applied: delete restore-publish.yml; merge_batch + merge_social rewritten (per-row, no auto-pad); Facebook PATTERN=(3,(0,)); remove root pins_patch_1.csv
+2026-10-19 | Grok | TODO next: rewrite 47 descriptions 264–311 (remove pad phrase) via pins_patch_2+
