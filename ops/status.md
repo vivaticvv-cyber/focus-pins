@@ -1,25 +1,27 @@
 # FOCUS ops status
 
-**Updated:** 2026-10-19 09:15 UTC (Grok)
+**Updated:** 2026-10-19 09:25 UTC (Grok)
 
-## ADHD psychology lock
-All texts and scene_prompts must serve ADHD audience: reduce shame, tiny executable steps, invite profile visit and trial/product links. Locked in PROJECT.md.
+## Lesson locked
+Autopilot #14 rejected batches because descriptions fell below 300 chars after split/push + one near-duplicate.  
+Rule now in PROJECT.md: always re-validate exact file lengths + uniqueness before every push.
 
 ## Batches
-- pins_batch_6.csv (262-286) + pins_batch_7.csv (287-311) in root.
-- Autopilot run #14 (workflow_dispatch) triggered 09:11 UTC — currently in_progress. Expect merge of 50 rows.
+- Corrected pins_batch_6 + 7 being re-pushed with all descriptions ≥ 320 chars.
+- Previous versions rejected; files still in root until successful merge.
+
+## Autopilot #14
+- Conclusion: success (social images M019/M020 generated, publish steps OK)
+- Merge of pins batches: FAILED (lint)
 
 ## Automations
-- "FOCUS daily ops check" created: daily 04:30 Europe/Kyiv, APP_ONLY.
-  Checks Actions, stock, batches; updates ops/; generates next batch if stock low.
-
-## pins.csv baseline
-- Was 261. After successful merge expect ~311.
+- FOCUS daily ops check active (04:30 Kyiv)
 
 ## Next
-1. Confirm Autopilot #14 success + files moved to batches/ + row count.
-2. Prepare social_batch (increase FB/X via Buffer).
-3. After images appear — quality review for ADHD tone.
+1. Finish re-push of length-fixed batches
+2. Re-trigger Autopilot
+3. Confirm merge + row count ~311
+4. social_batch
 
 ## Questions to Claude
 - None
