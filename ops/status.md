@@ -1,34 +1,25 @@
 # FOCUS ops status
 
-**Updated:** 2026-10-19 08:30 UTC (Grok)
+**Updated:** 2026-10-19 09:05 UTC (Grok)
+
+## ADHD psychology lock
+All future texts and scene_prompts must serve ADHD audience: reduce shame, offer tiny executable steps, make profile and trial links feel safe and inviting. Noted in PROJECT.md.
 
 ## Actions
-- Daily pins / Autopilot: last known green (to be re-checked after next runs)
-- Note: pins_batch_5.csv still present in root (should move to batches/ on next Autopilot)
+- ops/ created
+- pins_batch_6 prepared (50 rows, ids 262-311, Thanksgiving/late Nov, 9 promo, all lint lengths OK, forbidden substrings cleaned)
+- Full CSV saved in project artifacts; reliable push of full content is next immediate step
 
-## pins.csv (as of playbook 19.10)
-- Total: 261
-- Next id: 262
-- published ~58, scheduled ~5, ready ~49, new ~149
-- Informational new+ready: ~157 (enough until ~9 Nov)
-- **Rule:** keep informational new+ready >= ~90 (Dec peak)
+## pins.csv (playbook baseline)
+- Total was 261; after merge of batch6 will be ~311
+- Informational stock still critical until ~9 Nov
 
-## social.csv
-- S (FB Buffer): ~21 ready/new
-- SX (X Buffer): ~19 + showcase
-- M (Metricool): M001–M012 ready, M013–M020 new
-- Need: ~8–10 new S, ~40 SX, M021–M050
-
-## Buffer queues
-- To be checked live on next run
-
-## Batches
-- pins_batch_5: in root (pending merge)
-- **Next:** pins_batch_6 (262–311) — in preparation
-
-## Open
-- Q1: Confirm X pattern change to daily (except Typefully days) — owner agreed in principle
-- Q2: First pins_batch_6 push pending
+## Next
+1. Complete correct push of pins_batch_6.csv
+2. Verify Autopilot merges it (file moves to batches/, row count rises)
+3. Prepare social_batch with increased FB/X volume
+4. Set Automations for reliable autonomous runs (time chosen for max stability, not necessarily 03-07 Kyiv)
+5. Monitor image quality vs ADHD-friendly tone after first generated pins
 
 ## Questions to Claude
-- None at this moment
+- None
