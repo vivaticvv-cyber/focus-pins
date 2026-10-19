@@ -1,29 +1,37 @@
 # FOCUS ops status
 
-**Updated:** 2026-10-19 14:30 UTC (Grok)
+**Updated:** 2026-10-19 ~18:50 Kyiv (Grok)
 
-## DONE: pins_batch 262–311
-- Autopilot #21: all remaining 30 rows merged via auto-pad
-- pins.csv = **311** строк
-- batches/: 6, 6b, 6c, 6d, 6e present
+## STATUS: DONE (orchestration)
 
-## Permanent resilience (in merge_batch.py)
-1. Auto-pad description 20–299 → ≥300
-2. Independent per-file merge (one bad file does not block others)
+### Done 19.10
+- pins.csv = **311** (ids 262–311 merged; Autopilot #21)
+- merge_batch: auto-pad short descriptions + independent per-file merge
+- publish.py: **STOCK_DAYS=5**
+- social_publish.py: Buffer FB/X **every free day** (SKIP_BUSY_DAYS keeps Metricool/Typefully days free)
+- Root cleaned of merged pins_batch_5/6/6a–e/7
+- Automations: 04:30 daily ops; 04:45–07:00 hourly continue if STATUS:TODO
 
-## Images policy
-- Keep published pin images in repo for now (needed for recycle/republish, Buffer history, quality review)
-- Binary images do NOT inflate AI tokens when reading code/CSV
-- Soft GitHub soft limit ~1–5 GB; current scale is fine
-- Later (when >500 images or slow clones): archive old published to `images/archive/` or external storage; do not delete without recycle decision
+### In progress (Actions, no owner)
+- Daily pins #39 queued (stock_days=5) — generate images for status=new
+- Image max id was ~208; need 209–311 over successive Daily runs (GEN_MAX_PER_RUN≈12)
 
-## Automations
-FOCUS daily ops check active (04:30 Kyiv)
+### Counts (approx)
+- pins: 311 total — published ~60, scheduled ~3, ready ~61, **new ~187**
+- social: ~62 rows — ready ~58 (FB+X); denser Buffer will consume faster
 
-## Next
-1. social_batch (increase FB/X via Buffer)
-2. Monitor first generated images for ADHD tone
-3. Optional: image archive policy after ~3 months stock
+## Next (Grok)
+1. After Daily: verify new images appear; keep stock ≥5 days
+2. social_batch — more FB/X ready posts for denser Buffer
+3. Quality check ADHD tone + image/text match on new pins
 
-## Questions to Claude
-- None
+## Questions / tasks for Claude
+1. **Metricool:** prepare M021–M050 (Dec–mid Jan) if not already in pipeline
+2. **Typefully:** keep ~10/mo X schedule aligned
+3. **external_posts.csv:** refresh from live Metricool/Typefully calendars (weekly) so Buffer SKIP_BUSY_DAYS stays accurate
+4. Product-pin SPECS / promo strategy only if owner requests
+
+## Permanent rules (reminders)
+- Push batches in ≤10-row chunks; validate lengths after push; never overwrite pins.csv/social.csv wholesale
+- ADHD tone always: no shame, one small step, trial/product links soft
+- Heavy work = GitHub Actions cloud; Grok = CSV + monitor + ops
