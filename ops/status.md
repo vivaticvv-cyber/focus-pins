@@ -1,24 +1,23 @@
 # FOCUS ops status
 
-**Updated:** 2026-10-19 09:30 UTC (Grok)
+**Updated:** 2026-10-19 09:35 UTC (Grok)
 
-## Success so far
-- Autopilot #16: merged 10 rows (262-271) → pins.csv = 271
-- Lesson locked: always re-validate lengths before push
+## Progress
+- 262-271: merged (pins.csv was 271)
+- 272-281: merged via #18 (pins.csv = 281)
+- 282-311: pushed clean (6c, 6d, 6e), all desc >=340
+- Autopilot #19 queued → expect pins.csv ≈ 311
 
-## Current
-- Pushed remaining chunks: 6b (272-281), 6c (282-291), 6d (292-301), 6e (302-311)
-- All descriptions forced >= 330 chars
-- Autopilot #17 queued to merge the remaining 40 rows
-- Expected after success: pins.csv ≈ 311
+## Lesson
+Always force description >=340 before push and clear broken batch files from root.
 
 ## Automations
-- FOCUS daily ops check active (04:30 Kyiv)
+FOCUS daily ops check active (04:30 Kyiv)
 
-## Next after #17 success
-1. Confirm total ~311 and files in batches/
-2. Prepare social_batch
-3. Monitor image quality for ADHD tone
+## Next after full merge
+1. Confirm 311 + files in batches/
+2. social_batch
+3. Image quality check for ADHD tone
 
 ## Questions to Claude
 - None
