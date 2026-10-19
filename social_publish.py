@@ -38,7 +38,7 @@ CONFIG = dict(
     # Начало публикации через Buffer; можно переопределить переменными репозитория FB_START / X_START.
     START={"facebook": "2026-10-16", "x": "2026-10-16"},
     # (период в днях, номера дней периода, в которые публикуем)
-    PATTERN={"facebook": (1, (0,)), "x": (1, (0,))},   # Buffer: Facebook каждый 3-й день (остальные дни — Metricool), X 2 дня из 3 (3-й — Typefully)
+    PATTERN={"facebook": (3, (0,)), "x": (1, (0,))},   # Facebook: Buffer каждый 3-й день (остальные дни — Metricool); X: каждый день, кроме дней Typefully (SKIP_BUSY_DAYS по external_posts.csv)
     # Часы публикации по времени США (Восток) -> вес. Будни: утро и обед/после обеда; выходные — только середина дня.
     HOURS_ET={
         "facebook": {8: 3, 9: 5, 10: 5, 11: 3, 12: 6, 13: 5, 14: 5, 15: 3, 16: 1},
@@ -156,7 +156,7 @@ def status(r):
 
 def _hist(rows, net):
     h = [r for r in rows if r["network"] == net and status(r) in ("scheduled", "published")]
-    h.sort(key=lambda r: (P.parse_dt(r.get("scheduled_at")) or datetime.min.replace(tzinfo=timezone.utc), r["id"]))
+    h.sort(key=lambda r: (P.parse_dt(r.get("scheduled_at")) or datetime.min.replace(tzinfo=timezone.utc), r["id"])
     return h
 
 
@@ -388,92 +388,59 @@ def run(mode="run", now=None, client=None, csv_path=CSV, root=".", rng=None, url
             post_id, _ = create_social(client, net=net, text=text, first_comment=fc,
                                        image_rel=r["image"], due_utc=P.to_utc_z(when))
         except P.BufferError as e:
-            print(f"::error::[{net}] Buffer: {e}. Останавливаюсь; уже запланированное сохранено.")
-            save(rows, header, csv_path)
-            return 1
-        r.update(status="scheduled", scheduled_at=when.isoformat(timespec="minutes"), post_id=post_id)
-        save(rows, header, csv_path)
-        print("OK   " + line + f"  (post {post_id})")
-    return 1 if red else 0
-
-
-# ------------------------------------------------------------------ lint и plan
-def lint(csv_path=CSV, root="."):
-    rows, _ = load(csv_path)
-    bad = ready = 0
-    when = datetime(2026, 11, 2, 12, 0, tzinfo=P.kyiv())
-    for r in rows:
-        if status(r) != "ready":
+            print(f"::error::[{net}] {r['id']}: {e}")
+            red = True
             continue
-        ready += 1
-        msgs = validate(r, root, when)
-        if msgs:
-            bad += 1
-            print(f"{r['id']}: " + "; ".join(msgs))
-    left = {n: sum(1 for r in rows if r["network"] == n and status(r) == "ready") for n in cfg("CHANNELS")}
-    new = {n: sum(1 for r in rows if r["network"] == n and status(r) == "new") for n in cfg("CHANNELS")}
-    print(f"Готовых строк: {ready} (Facebook {left['facebook']}, X {left['x']}); ждут картинок: "
-          f"Facebook {new['facebook']}, X {new['x']}; с замечаниями: {bad}")
-    return 1 if bad else 0
+        r.update(status="scheduled", post_id=post_id,
+                 scheduled_at=when.isoformat(timespec="minutes"))
+        print(f"OK   {line} -> {post_id}")
+        if not dry:
+            save(rows, header, csv_path)
+    if red:
+        sys.exit(1)
 
 
-def print_plan(days=30):
+def plan(days=30):
+    now = P.now_kyiv()
     external = load_external()
-    today = P.now_kyiv()
-    d0 = min(net_start(n) for n in cfg("CHANNELS"))
-    d0 = max(d0, today.date())
-    print("дата         Facebook                          X       (B = Buffer, время Киев/ET; m, t = Metricool, Typefully)")
-    tot = {n: 0 for n in cfg("CHANNELS")}
-    chron = {n: list(external.get(n, [])) for n in cfg("CHANNELS")}      # как в боевом запуске: час не повторяется
+    print(f"План на {days} дней от {now.date()} (Киев)")
     for i in range(days):
-        d = d0 + timedelta(days=i)
-        cells = []
+        day = now.date() + timedelta(days=i)
+        parts = []
         for net in ("facebook", "x"):
-            c = ""
-            if posts_for_day(net, d, external):
-                prev = sorted(x for x in chron[net] if x.date() < d)[-cfg("RECENT_HOURS_N"):]
-                t = make_time(net, d, today - timedelta(days=2), [], random.Random(f"social-{net}-{d.isoformat()}"),
-                              {x.astimezone(ET).hour for x in prev})
-                c = f"B {t:%H:%M}/{t.astimezone(ET):%H:%M}" if t else "B ?"
-                if t:
-                    chron[net].append(t)
-                tot[net] += 1
-            ext = [e for e in external.get(net, []) if e.date() == d]
-            if ext:
-                c += (" " if c else "") + ("m" if net == "facebook" else "t") + f" {ext[0]:%H:%M}"
-            cells.append(c)
-        print(f"{d} {d:%a}  {cells[0]:<32} {cells[1]}")
-    print(f"Всего за {days} дн. через Buffer: Facebook {tot['facebook']}, X {tot['x']}")
-
-
-def main(argv):
-    if "--plan" in argv:
-        i = argv.index("--plan")
-        print_plan(int(argv[i + 1]) if len(argv) > i + 1 and argv[i + 1].isdigit() else 30)
-        return 0
-    if "--lint" in argv:
-        return lint()
-    token = (os.environ.get("BUFFER_TOKEN") or "").strip()
-    client = P.BufferClient(token) if token else None
-    try:
-        if "--check" in argv:
-            if not client:
-                print("::error::BUFFER_TOKEN не задан")
-                return 1
-            return 0 if check_connection(client) else 1
-        if "--dry-run" in argv:
-            return run("dry-run", client=client)
-        if not client:
-            print("::error::BUFFER_TOKEN не задан")
-            return 1
-        return run("run", client=client)
-    except P.BufferAuthError as e:
-        print(f"::error::Buffer отклонил ключ: {e}. Проверьте секрет BUFFER_TOKEN.")
-        return 1
-    except P.BufferError as e:
-        print(f"::error::Buffer: {e}")
-        return 1
+            n = posts_for_day(net, day, external)
+            if n:
+                parts.append(net[0])
+            else:
+                busy = any(d.date() == day for d in external.get(net, ()))
+                parts.append("m" if net == "facebook" and not busy else ("t" if net == "x" and busy else "-"))
+        print(f"{day}: {' '.join(parts)}")
 
 
 if __name__ == "__main__":
-    sys.exit(main(sys.argv[1:]))
+    mode = "run"
+    if "--dry-run" in sys.argv:
+        mode = "dry-run"
+    elif "--check" in sys.argv:
+        token = os.environ.get("BUFFER_TOKEN")
+        if not token:
+            print("BUFFER_TOKEN не задан")
+            sys.exit(1)
+        ok = check_connection(P.BufferClient(token))
+        sys.exit(0 if ok else 1)
+    elif "--lint" in sys.argv:
+        rows, _ = load()
+        bad = sum(1 for r in rows if status(r) == "ready" and validate(r))
+        print(f"Готовых с замечаниями: {bad}")
+        sys.exit(1 if bad else 0)
+    elif "--plan" in sys.argv:
+        i = sys.argv.index("--plan")
+        n = int(sys.argv[i + 1]) if i + 1 < len(sys.argv) and sys.argv[i + 1].isdigit() else 30
+        plan(n)
+        sys.exit(0)
+    token = os.environ.get("BUFFER_TOKEN")
+    client = P.BufferClient(token) if token else None
+    if mode == "run" and not client:
+        print("BUFFER_TOKEN не задан")
+        sys.exit(1)
+    run(mode, client=client)
