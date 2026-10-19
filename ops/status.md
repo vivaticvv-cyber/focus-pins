@@ -1,25 +1,24 @@
 # FOCUS ops status
 
-**Updated:** 2026-10-19 09:05 UTC (Grok)
+**Updated:** 2026-10-19 09:20 UTC (Grok)
 
 ## ADHD psychology lock
-All future texts and scene_prompts must serve ADHD audience: reduce shame, offer tiny executable steps, make profile and trial links feel safe and inviting. Noted in PROJECT.md.
+All texts and scene_prompts must serve ADHD audience: reduce shame, tiny executable steps, invite profile visit and trial/product links. Locked in PROJECT.md.
 
-## Actions
-- ops/ created
-- pins_batch_6 prepared (50 rows, ids 262-311, Thanksgiving/late Nov, 9 promo, all lint lengths OK, forbidden substrings cleaned)
-- Full CSV saved in project artifacts; reliable push of full content is next immediate step
+## Batches
+- **pins_batch_6.csv** (262-286) and **pins_batch_7.csv** (287-311) pushed to root.
+- 50 rows total, ~9 promo, Thanksgiving/late Nov focus, lengths and forbidden substrings validated.
+- Next Autopilot run should merge both into pins.csv and move files to batches/.
 
-## pins.csv (playbook baseline)
-- Total was 261; after merge of batch6 will be ~311
-- Informational stock still critical until ~9 Nov
+## pins.csv baseline
+- Was 261. After merge expect ~311.
+- Informational stock critical until ~9 Nov — these 50 rows buy more time.
 
-## Next
-1. Complete correct push of pins_batch_6.csv
-2. Verify Autopilot merges it (file moves to batches/, row count rises)
-3. Prepare social_batch with increased FB/X volume
-4. Set Automations for reliable autonomous runs (time chosen for max stability, not necessarily 03-07 Kyiv)
-5. Monitor image quality vs ADHD-friendly tone after first generated pins
+## Next actions
+1. Wait for / trigger Autopilot → confirm merge (row count + files in batches/).
+2. Prepare social_batch (increase FB/X volume via Buffer).
+3. Set Automations for autonomous monitoring and future batch generation (time chosen for max reliability).
+4. After first images generate — review quality vs ADHD-friendly tone.
 
 ## Questions to Claude
 - None
