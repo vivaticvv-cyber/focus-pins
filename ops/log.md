@@ -1,10 +1,8 @@
 # FOCUS ops log
 
-2026-10-19 | Grok | Created ops/status.md and ops/log.md
-2026-10-19 | Grok | Project files organized (PROJECT.md + playbook)
-2026-10-19 | Grok | ADHD psychology rule locked into PROJECT.md
-2026-10-19 | Grok | pins_batch_6 (262-286) and pins_batch_7 (287-311) pushed — 50 rows total, validated
-2026-10-19 | Grok | Autopilot run #14 triggered (workflow_dispatch) to merge batches
-2026-10-19 | Grok | Automation "FOCUS daily ops check" created (04:30 Kyiv daily)
-2026-10-19 | Grok | Autopilot #14 success overall but batches REJECTED by lint (descriptions <300 chars after split-push, one near-duplicate, one broken desc). Lesson: always re-validate lengths after any split/reassemble before push. Never push without local length check of the exact file being sent.
-2026-10-19 | Grok | Rebuilding and re-pushing corrected batches with all descriptions 300-450
+2026-10-19 | Grok | Created ops/ + PROJECT.md + ADHD rule
+2026-10-19 | Grok | Autopilot #14: batches rejected (short descriptions after split)
+2026-10-19 | Grok | Lesson locked: always re-validate exact file lengths before push
+2026-10-19 | Grok | Autopilot #16: SUCCESS — 10 rows (262-271) merged, pins.csv=271
+2026-10-19 | Grok | Pushed remaining 40 rows in verified chunks 6b-6e
+2026-10-19 | Grok | Autopilot #17 queued for remaining merge
