@@ -1,15 +1,22 @@
 """Безопасно добавить новую партию строк (pins_batch_N.csv) в pins.csv, не трогая статусы уже сделанных пинов.
 
-Запуск:  python merge_batch.py
-Что делает:
-  1) берёт все files pins_batch_*.csv в корне;
-  2) пропускает id уже в pins.csv;
-  3) авто-дополняет description 20–299 символов до >=300;
-  4) lint; успешные партии дописываются независимо (один плохой файл не блокирует остальные);
-  5) переносит обработанные в batches/.
+Запуск:  python merge_batch.py   (в GitHub: Actions -> «Merge pins batch» -> Run workflow, а также шагом «Подготовка» Autopilot)
+Файлы pins_patch_N.csv ЗАМЕНЯЮТ существующие строки с теми же id, но только если строка ещё имеет status=new.
+
+Что делает (политика «построчно», БЕЗ автодобивки текста):
+  1) берёт все файлы pins_batch_*.csv в корне;
+  2) пропускает id, которые уже есть в pins.csv (повторный запуск ничего не дублирует);
+  3) каждую строку проверяет тем же lint, что и publish.py --lint, плюс дубли заголовков и описаний;
+  4) ХОРОШИЕ строки дописывает в pins.csv, ПЛОХИЕ не теряются: уходят в batches/rejected_<файл>.csv
+     с причиной в batches/_report.md; один плохой пин не блокирует остальные;
+  5) обработанный файл переносится в batches/.
+Текст пинов скрипт НЕ меняет: исправляет автор строки (см. FOCUS-grok-fixes.md).
 """
+import contextlib
 import csv
+import datetime
 import glob
+import io
 import os
 import shutil
 import sys
@@ -17,23 +24,7 @@ import tempfile
 
 import publish as P
 
-_PAD = " A small visible step is still progress for an ADHD brain."
-
-
-def ensure_description_length(row, rid, fn):
-    d = (row.get("description") or "").strip()
-    if len(d) >= 300:
-        return False
-    if len(d) < 20:
-        return False
-    original = d
-    while len(d) < 300:
-        d = d + _PAD
-    if len(d) > 450:
-        d = d[:447] + "..."
-    row["description"] = d
-    print(f"{fn}: пин {rid}: description {len(original)}→{len(d)} (auto-pad)")
-    return True
+REPORT = os.path.join("batches", "_report.md")
 
 
 def apply_patches(rows, header):
@@ -54,11 +45,46 @@ def apply_patches(rows, header):
                 print(f"::error::{fn}: для id {rid} нет images/{rid}.jpg — сначала загрузите картинки")
                 problems += 1
                 continue
+            issues = row_issues(pr, header)
+            if issues:
+                print(f"{fn}: id {rid} патч НЕ применён: {'; '.join(issues)}")
+                problems += 1
+                continue
             for k in header:
                 cur[k] = pr.get(k, "")
             done += 1
         used.append(fn)
     return done, problems, used
+
+
+def row_issues(row, header):
+    """Список замечаний lint по одной строке (пустой список = строка годная)."""
+    with tempfile.TemporaryDirectory() as tmp:
+        p = os.path.join(tmp, "one.csv")
+        P.save_rows([{k: row.get(k, "") for k in header}], header, p)
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            bad = P.lint(p, images_dir="images")
+    if not bad:
+        return []
+    lines = [ln.strip() for ln in buf.getvalue().splitlines() if ln.strip() and not ln.startswith("Строк:")]
+    return lines or ["lint: замечание (см. publish.py --lint)"]
+
+
+def write_rejected(fn, header, rejected):
+    os.makedirs("batches", exist_ok=True)
+    out = os.path.join("batches", "rejected_" + os.path.basename(fn))
+    P.save_rows([r for r, _ in rejected], header, out)
+    return out
+
+
+def append_report(entries):
+    os.makedirs("batches", exist_ok=True)
+    stamp = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+    with open(REPORT, "a", encoding="utf-8") as f:
+        f.write(f"\n## {stamp}\n")
+        for line in entries:
+            f.write(("" if line.startswith(" ") else "- ") + line + "\n")
 
 
 def main():
@@ -71,59 +97,60 @@ def main():
     have_ids = {int(r["id"]) for r in rows}
     titles = {(r.get("title") or "").strip().lower() for r in rows}
     descs = {(r.get("description") or "").strip() for r in rows}
-    added_total = []
-    file_problems = 0
+    added_total, report, n_rejected = [], [], 0
     for fn in files:
         new, _ = P.load_rows(fn)
-        fresh = []
-        local_problems = 0
+        fresh, rejected = [], []
         for r in new:
             try:
                 rid = int(r["id"])
             except (KeyError, ValueError):
-                print(f"{fn}: строка без числового id пропущена: {r}")
-                local_problems += 1
+                rejected.append((r, "строка без числового id"))
                 continue
             if rid in have_ids:
                 continue
-            ensure_description_length(r, rid, fn)
+            issues = row_issues(r, header)
             t, d = (r.get("title") or "").strip().lower(), (r.get("description") or "").strip()
-            if t in titles or d in descs:
-                print(f"{fn}: пин {rid} повторяет заголовок или описание уже существующего пина")
-                local_problems += 1
+            if t in titles:
+                issues.append("title повторяет существующий пин")
+            if d in descs:
+                issues.append("description повторяет существующий пин")
+            if issues:
+                rejected.append((r, "; ".join(issues)))
                 continue
             titles.add(t); descs.add(d); fresh.append(r)
-        if not fresh:
-            if local_problems == 0:
-                print(f"{fn}: новых строк нет")
-            else:
-                print(f"{fn}: новых валидных строк нет (замечаний: {local_problems})")
-                file_problems += 1
-            continue
-        with tempfile.TemporaryDirectory() as tmp:
-            p = os.path.join(tmp, "check.csv")
-            P.save_rows(fresh, header, p)
-            if P.lint(p, images_dir="images"):
-                print(f"{fn}: есть замечания lint — партия не добавлена")
-                file_problems += 1
-                continue
         for r in fresh:
             rows.append({k: r.get(k, "") for k in header})
             have_ids.add(int(r["id"]))
-        added_total.append((fn, len(fresh)))
+        if fresh:
+            added_total.append((fn, len(fresh)))
+        if rejected:
+            n_rejected += len(rejected)
+            out = write_rejected(fn, header, rejected)
+            for r, why in rejected:
+                print(f"{fn}: пин {r.get('id')} ОТКЛОНЁН: {why}")
+            report.append(f"{fn}: принято {len(fresh)}, отклонено {len(rejected)} → {out}")
+            report += [f"  - id {r.get('id')}: {why}" for r, why in rejected]
+        else:
+            report.append(f"{fn}: принято {len(fresh)}, отклонено 0")
+        if not fresh and not rejected:
+            print(f"{fn}: новых строк нет")
     if added_total or patch_files:
         P.save_rows(rows, header, "pins.csv")
-        os.makedirs("batches", exist_ok=True)
         for fn, n in added_total:
-            shutil.move(fn, os.path.join("batches", os.path.basename(fn)))
             print(f"Добавлено {n} строк из {fn}")
-        for fn in patch_files:
-            shutil.move(fn, os.path.join("batches", os.path.basename(fn)))
         if patch_files:
             print(f"Заменено строк патчами: {n_patch}")
         print(f"Теперь в pins.csv {len(rows)} строк.")
-    if file_problems or prob_patch:
-        print(f"::warning::{file_problems + prob_patch} файл(ов) с замечаниями пропущены; успешные партии сохранены.")
+    os.makedirs("batches", exist_ok=True)
+    for fn in files + patch_files:
+        shutil.move(fn, os.path.join("batches", os.path.basename(fn)))
+    if patch_files:
+        report.append(f"патчи: заменено {n_patch}, не применено {prob_patch}")
+    if report:
+        append_report(report)
+    if n_rejected or prob_patch:
+        print(f"::warning::Отклонено строк: {n_rejected + prob_patch}. Остальные приняты. Список — batches/_report.md, строки — batches/rejected_*.csv")
     return 0
 
 
