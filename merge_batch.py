@@ -57,8 +57,25 @@ def apply_patches(rows, header):
     return done, problems, used
 
 
+def shape_issue(row):
+    """Проверка формы строки CSV: лишние колонки почти всегда значат запятую без кавычек внутри текста
+    (например, в pin_title), из-за чего поля сдвигаются и описание «укорачивается»."""
+    if row.get(None):
+        return (f"лишних колонок: {len(row[None])}; в одном из полей есть запятая без кавычек "
+                f"(заключайте КАЖДОЕ текстовое поле в двойные кавычки)")
+    if any(v is None for v in row.values()):
+        return "колонок меньше, чем в заголовке: строка оборвана"
+    return ""
+
+
 def row_issues(row, header):
     """Список замечаний lint по одной строке (пустой список = строка годная)."""
+    sh = shape_issue(row)
+    if sh:
+        return [sh]
+    if P.status(row) == "new" and ((row.get("scheduled_at") or "").strip() or (row.get("buffer_post_id") or "").strip()):
+        return ["у строки status=new заполнены служебные колонки scheduled_at/buffer_post_id "
+                "(вероятно, ссылка попала не в колонку link: у новой строки все 13 колонок должны стоять на своих местах)"]
     with tempfile.TemporaryDirectory() as tmp:
         p = os.path.join(tmp, "one.csv")
         P.save_rows([{k: row.get(k, "") for k in header}], header, p)
@@ -105,7 +122,7 @@ def main():
             try:
                 rid = int(r["id"])
             except (KeyError, ValueError):
-                rejected.append((r, "строка без числового id"))
+                rejected.append((r, "строка без числового id")
                 continue
             if rid in have_ids:
                 continue
@@ -123,7 +140,7 @@ def main():
             rows.append({k: r.get(k, "") for k in header})
             have_ids.add(int(r["id"]))
         if fresh:
-            added_total.append((fn, len(fresh)))
+            added_total.append((fn, len(fresh))
         if rejected:
             n_rejected += len(rejected)
             out = write_rejected(fn, header, rejected)
