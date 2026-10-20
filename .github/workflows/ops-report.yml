@@ -1,0 +1,35 @@
+name: Ops report
+on:
+  schedule:
+    - cron: "40 4 * * *"      # раз в сутки, после ночных запусков
+  workflow_dispatch:
+concurrency:
+  group: pins
+  cancel-in-progress: false
+permissions:
+  contents: write
+  actions: read
+jobs:
+  report:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Последние запуски Actions
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p ops
+          gh run list --limit 12 --json name,conclusion,status,createdAt > ops/_runs.json || echo "[]" > ops/_runs.json
+      - run: python ops_report.py
+      - name: Сохранить отчёт
+        run: |
+          git config user.name focus-bot
+          git config user.email focus-bot@users.noreply.github.com
+          git add ops/auto-status.md ops/_runs.json
+          git diff --cached --quiet || git commit -m "ops: auto-status"
+          git pull --rebase -q || true
+          git push || true
