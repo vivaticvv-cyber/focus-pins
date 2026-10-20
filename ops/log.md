@@ -14,3 +14,8 @@
 2026-10-20 | Grok | Insurance: confirmed merge 312-316 (pins.csv=316), pushed pins_batch_2 (317-321 info), triggered merge; stock still low
 2026-10-20 | Grok | Insurance: confirmed partial merge 317-321 (pins.csv max 319), pushed pins_batch_3 (322-326 info, valid scenes), triggered merge; stock still low
 2026-10-20 | Grok | Claude help-2: restored social_publish.py from 56a4622 + PATTERN; autopilot_prep + heal_social; pins_batch_3_fix (315,318,320,321) merged; backup-before-edit rule added
+2026-10-20 | Grok | Claude help-3: merge shape_issue (quote columns); pins_patch_5 links 267+284; ops_report shifted-columns; metrics.md; delete restore-social-publish.yml + root leftovers
+2026-10-20 | Grok | pins_patch_6/7/8: pad 23→13→3→0; all promo links fixed (289,294,299,304,309); root patches cleaned
+2026-10-20 | Grok | Autopilot #23 success (X SX006 Buffer 17:56 Kyiv); #24 success (heal_social 10, images S021-025/SX021)
+2026-10-20 | Grok | Decision: keep Grok Automations 4:30 + continue 4:45-7:00 (do not move to 3:30)
+2026-10-20 | Grok | STATUS: DONE; chat handoff recommended (context heavy)
