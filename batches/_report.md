@@ -10,3 +10,7 @@
 
 ## 2026-10-20 00:36 UTC (social)
 - social_batch_1.csv: принято 10, отклонено 0
+
+## 2026-10-20 01:47 UTC
+- pins_batch_1.csv: принято 4, отклонено 1 → batches/rejected_pins_batch_1.csv
+  - id 315: пин 315: в сцене нежелательные слова: laptop, screen (используйте {mascot} или предмет-метафору)
