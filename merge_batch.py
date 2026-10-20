@@ -122,7 +122,7 @@ def main():
             try:
                 rid = int(r["id"])
             except (KeyError, ValueError):
-                rejected.append((r, "строка без числового id")
+                rejected.append((r, "строка без числового id"))
                 continue
             if rid in have_ids:
                 continue
@@ -140,7 +140,7 @@ def main():
             rows.append({k: r.get(k, "") for k in header})
             have_ids.add(int(r["id"]))
         if fresh:
-            added_total.append((fn, len(fresh))
+            added_total.append((fn, len(fresh)))
         if rejected:
             n_rejected += len(rejected)
             out = write_rejected(fn, header, rejected)
