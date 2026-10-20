@@ -1,29 +1,30 @@
 # FOCUS ops status
 
-**Updated:** 2026-10-20 04:37 Kyiv (Grok daily)
+**Updated:** 2026-10-20 04:50 Kyiv (Grok insurance)
 
-## STATUS: TODO — low info stock (32 ready), Autopilot #22 failed on Buffer publish, social_batch_1.csv leftover in root, pad rewrites pending
+## STATUS: TODO — merge of pins_batch_1 (312-316) triggered, stock still low after, Autopilot syntax fixed, leftovers cleared
 
 ### Success criterion
 - Метрика: продажи Gumroad. Сейчас **0**. Контроль: **31.10.2026**.
 
 ### Current numbers (pins.csv)
-- Total: **311**
+- Total: **311** (batch 312-316 pending merge)
 - new: 181 | ready: 63 (info ready: **32**) | scheduled: 4 | published: 63
 - Informational stock days: ~6.4 (STOCK_DAYS=5, target ~90 ready info) — **LOW**
 
 ### Actions
-- Daily pins latest (#40, 20.10 01:04 UTC): **success**
-- Autopilot latest (#22, 20.10 00:36 UTC): **failure** (step «Публикация Facebook и X в Buffer»)
+- Daily pins latest (#40): **success**
+- Autopilot latest (#22): **failure** (SyntaxError in social_publish.py — fixed)
+- Merge pins batch triggered for pins_batch_1.csv
 
 ### Leftovers in root
-- social_batch_1.csv (S021–S025 + SX021–SX025) — rows already appear in social.csv but file remains
-- pins_patch_2.csv, pins_patch_3.csv
+- pins_batch_1.csv (312-316) — merge triggered
+- (social_batch_1, pins_patch_2/3 deleted)
 
 ### Pending
-1. Generate + push next small pins_batch (start id 312, info board, ADHD rules) to refill ready stock
-2. Diagnose Autopilot Buffer publish failure; clear or re-trigger social_batch_1
-3. Continue description rewrites 264–311 (remove pad phrase) via pins_patch ≤10 rows
+1. Confirm merge of 312-316; generate next small info batch if still low
+2. Continue description rewrites 264–311 (remove pad phrase) via pins_patch ≤10 rows
+3. Re-run Autopilot after syntax fix if needed for Buffer publish
 
 ### Permanent rules
 1. Скрипты не меняют авторский текст (никакой автодобивки)
