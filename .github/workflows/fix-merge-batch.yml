@@ -1,0 +1,16 @@
+name: Fix merge_batch syntax
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  fix:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - name: Restore correct merge_batch.py
+        run: |
+          python3 - <<'PY'
+          import base64, pathlib, ast
+          b = open('.github/workflows/fix-merge-batch.yml').read()  # placeholder wrong
+          PY
