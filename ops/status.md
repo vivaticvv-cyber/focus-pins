@@ -1,30 +1,31 @@
 # FOCUS ops status
 
-**Updated:** 2026-10-19 ~22:20 Kyiv (Grok)
+**Updated:** 2026-10-20 04:37 Kyiv (Grok daily)
 
-## STATUS: TODO (description rewrite in progress)
+## STATUS: TODO — low info stock (32 ready), Autopilot #22 failed on Buffer publish, social_batch_1.csv leftover in root, pad rewrites pending
 
 ### Success criterion
 - Метрика: продажи Gumroad. Сейчас **0**. Контроль: **31.10.2026**.
 
-### Claude fixes 19.10 — сделано
-1. ✅ Удалён `.github/workflows/restore-publish.yml`
-2. ✅ `merge_batch.py` — построчный accept/reject, **без** auto-pad / `_PAD`
-3. ✅ `merge_social.py` — построчный accept/reject
-4. ✅ `social_publish.py` PATTERN Facebook = `(3, (0,))` (каждый 3-й день); X = каждый день кроме Typefully
-5. ✅ Удалён корневой `pins_patch_1.csv`
-6. ⏳ **Осталось:** переписать 47 описаний ids 264–311 (кроме 267) — убрать фразу «A small visible step…», длина 340–420, хэштеги в конце. Частями ≤10 через `pins_patch_2+`.
+### Current numbers (pins.csv)
+- Total: **311**
+- new: 181 | ready: 63 (info ready: **32**) | scheduled: 4 | published: 63
+- Informational stock days: ~6.4 (STOCK_DAYS=5, target ~90 ready info) — **LOW**
 
-### Done earlier 19.10
-- pins.csv = 311; Daily #39 stock full (info ready 29/29)
-- social_batch_1 в корне (S021–S025 + SX021–SX025) — ждёт Autopilot merge
+### Actions
+- Daily pins latest (#40, 20.10 01:04 UTC): **success**
+- Autopilot latest (#22, 20.10 00:36 UTC): **failure** (step «Публикация Facebook и X в Buffer»)
 
-### Next (Grok)
-1. pins_patch: 264–290 first, then 291–311 (≤10 per file)
-2. After patches: lint clean, no pad phrase
-3. Monitor Autopilot for social_batch_1
+### Leftovers in root
+- social_batch_1.csv (S021–S025 + SX021–SX025) — rows already appear in social.csv but file remains
+- pins_patch_2.csv, pins_patch_3.csv
 
-### Permanent rules (updated)
+### Pending
+1. Generate + push next small pins_batch (start id 312, info board, ADHD rules) to refill ready stock
+2. Diagnose Autopilot Buffer publish failure; clear or re-trigger social_batch_1
+3. Continue description rewrites 264–311 (remove pad phrase) via pins_patch ≤10 rows
+
+### Permanent rules
 1. Скрипты не меняют авторский текст (никакой автодобивки)
 2. Плохая строка отклоняется отдельно; остальные принимаются
 3. Нет workflows, перезаписывающих исходники из истории
