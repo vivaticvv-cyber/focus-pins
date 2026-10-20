@@ -17,8 +17,27 @@ def run(cmd):
     return subprocess.call(cmd, shell=True)
 
 
+def heal_social():
+    """Строки social.csv со status=ready, но без картинки, возвращаем в new, чтобы social.py нарисовал картинку.
+    (Иначе публикация упадёт на «не указана картинка».)"""
+    try:
+        import social as S
+        rows = S.load()
+        n = 0
+        for r in rows:
+            if r.get("status") == "ready" and not (r.get("image") or "").strip():
+                r["status"] = "new"
+                n += 1
+        if n:
+            S.save(rows)
+            print(f"heal_social: {n} строк ready без картинки → new")
+    except Exception as e:  # не критично для остального
+        print(f"::warning::heal_social: {e}")
+
+
 def main():
     rc = 0
+    heal_social()
     if glob.glob("pins_batch_*.csv") or glob.glob("pins_patch_*.csv"):
         rc |= run("python merge_batch.py")
     if glob.glob("social_batch_*.csv"):

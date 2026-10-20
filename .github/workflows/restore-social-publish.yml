@@ -1,0 +1,36 @@
+name: Restore social_publish
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  restore:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - name: Restore from 56a4622 + PATTERN
+        run: |
+          set -e
+          curl -sL "https://raw.githubusercontent.com/vivaticvv-cyber/focus-pins/56a46229f7295383f9bbf165873f25bb58157fed/social_publish.py" -o social_publish.py
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          p = Path("social_publish.py")
+          src = p.read_text()
+          new = 'PATTERN={"facebook": (3, (0,)), "x": (1, (0,))},   # Facebook: Buffer каждый 3-й день (остальные дни — Metricool); X: каждый день, кроме дней Typefully (SKIP_BUSY_DAYS по external_posts.csv)'
+          src2, n = re.subn(r'PATTERN=\{[^}]+\},[^\n]*', new, src, count=1)
+          assert n == 1, f"PATTERN replace count={n}"
+          assert "def lint" in src2 and "def print_plan" in src2
+          import ast; ast.parse(src2)
+          p.write_text(src2)
+          print("restored ok, bytes", p.stat().st_size)
+          PY
+      - name: Commit
+        run: |
+          git config user.name focus-bot
+          git config user.email focus-bot@users.noreply.github.com
+          git add social_publish.py
+          git diff --cached --quiet && echo "no change" && exit 0
+          git commit -m "restore social_publish.py from 56a4622 + PATTERN (owner decision 19.10)"
+          git pull --rebase -q || true
+          git push
