@@ -50,7 +50,12 @@ def main():
             if not r.get("id") or r["id"] in have_ids:
                 continue
             row = {k: r.get(k, "") for k in S.FIELDS}
-            issues = row_issues(row)
+            if r.get(None):
+                issues = [f"лишних колонок: {len(r[None])}; в тексте запятая без кавычек (заключайте каждое текстовое поле в двойные кавычки)"]
+            elif any(v is None for v in r.values()):
+                issues = ["колонок меньше, чем в заголовке: строка оборвана"]
+            else:
+                issues = row_issues(row)
             if (row.get("text") or "").strip() in texts:
                 issues.append("text повторяет существующую строку")
             if issues:
