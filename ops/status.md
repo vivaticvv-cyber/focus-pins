@@ -1,10 +1,10 @@
 # FOCUS ops status
 
-**Updated:** 2026-10-20 22:20 Kyiv (Grok)
+**Updated:** 2026-10-20 23:32 Kyiv (Grok)
 
 ## STATUS: DONE
 
-Конвейер стабилен. Следующая осознанная работа — пополнение stock / social_batch по `ops/auto-status.md` или чекпоинт продаж 31.10.
+Конвейер стабилен. Продуктовые пины теперь полностью автоматизированы (без Claude).
 
 ### Success criterion
 - **Метрика:** продажи Gumroad. Сейчас **0**.
@@ -25,8 +25,8 @@
 | Autopilot | 21:40, 02:55 | 00:40, 05:55 |
 | Ops report | 04:40 | 07:40 |
 
-- Autopilot **#22** failure (SyntaxError social_publish) — **исправлено** restore 56a4622+PATTERN
-- Autopilot **#23–#24** success (X SX006 в Buffer; heal_social 10→new; картинки S021–025, SX021)
+- Autopilot **#22** failure (SyntaxError social_publish) — **исправлено**
+- Autopilot **#23–#24** success
 
 ### Grok Automations (не GH)
 | Имя | Расписание Киев |
@@ -34,14 +34,20 @@
 | FOCUS daily ops check | ежедневно **4:30** |
 | FOCUS batch continue | каждый час **4:45–7:00** |
 
-Решение 20.10: **не сдвигать на 3:30** — текущего окна хватает при коротких зелёных прогонах.
+### Сделано 20.10 (Grok + Claude help-2/3/4)
+- help-2/3: social_publish, heal_social, merges без auto-pad, pad→0, links, metrics.md
+- **help-4 COMPLETE:** `product_pins.py` + `product_specs.csv` (34 specs) + skip в `generate.py` + вызов в `autopilot_prep.py`
+- Продуктовые пины теперь рисует Autopilot автоматически (без Claude и без нейросети)
 
-### Сделано 20.10 (Grok + Claude help-2/3)
-- `social_publish.py` restored; `heal_social` в autopilot_prep
-- merge_batch/social: shape_issue, per-row reject, **без** auto-pad текста
-- pins_patch_5–8: pad 47→0; promo links 267/284/289/294/299/304/309 в колонке `link`
-- ops_report + metrics.md; check-code.yml; убраны one-shot restore workflows
-- Корень очищен от leftover patches
+### График пополнения (help-4, чтобы runway ≥ 14 дн.)
+| к дате | info дописано | promo дописано |
+|--------|---------------|----------------|
+| 10.11  | 14            | 16             |
+| 17.11  | 66            | 30             |
+| 24.11  | 117           | 45             |
+| 01.12  | 169           | 59             |
+
+Ритм: ~40 info + 12 promo в неделю (файлами по 10 строк).
 
 ### Permanent rules (кратко)
 1. Скрипты не меняют авторский текст (нет auto-pad)
@@ -51,12 +57,14 @@
 5. Facebook Buffer = каждый 3-й день (PATTERN); X каждый день кроме Typefully
 6. CSV: 13 колонок, **все текстовые поля в кавычках**, куски ≤10 строк
 7. Сцены без laptop/screen/phone/hand/person/face…
-8. Запас смотреть в `ops/auto-status.md`, не по числу ready-картинок
+8. Запас смотреть в `ops/auto-status.md`
 9. social картинки **отдельно** от Pinterest: FB 1080×1350 (4:5), X 1600×900
 10. Metricool / Typefully / external_posts — зона Claude
+11. **Продуктовые пины:** scene_prompt = `product pin (pinterest_product.py)` + строка в `product_specs.csv` → рисует `product_pins.py`
 
 ### Next (без участия владельца)
 1. Ночной Daily + утренний Autopilot по cron
-2. При info runway < 14 дн. — новая pins_batch (info)
-3. При падении social ready — social_batch + stock
+2. При info runway < 14 дн. — pins_batch (info)
+3. При падении social ready — social_batch
 4. 25.10 / 31.10 — владелец заполняет metrics.md
+5. Промо начинать уже сейчас (цель ≥16 к 10.11, половина — продуктовые)
