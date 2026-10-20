@@ -46,6 +46,7 @@ def main():
     ri, need_i = runway(len(info), INFO_SHARE, today + timedelta(1))
     rp, need_p = runway(len(promo), 1 - INFO_SHARE, today + timedelta(1))
     pad = [r["id"] for r in rows if PAD in (r.get("description") or "")]
+    odd = [r["id"] for r in rows if st(r) == "new" and ((r.get("scheduled_at") or "").strip() or (r.get("buffer_post_id") or "").strip())]
     with contextlib.redirect_stdout(io.StringIO()) as buf:
         bad = P.lint("pins.csv", images_dir="images")
     L = [f"# Auto status (ops_report.py) — {now:%Y-%m-%d %H:%M} UTC", ""]
@@ -56,6 +57,7 @@ def main():
     days_i = (ri - today).days if ri else 999
     L.append(f"- Запас информационных: {days_i} дн. → " + ("ПОРА ПИСАТЬ ПАРТИЮ" if days_i < MIN_RUNWAY_DAYS else "в норме"))
     L.append(f"- lint pins.csv: {'замечания есть (запусти Daily pins → lint)' if bad else 'замечаний нет'}")
+    L.append(f"- Строк new со сдвинутыми колонками (служебные поля заполнены): {len(odd)}" + (f" (id {', '.join(odd)}) → исправить патчем" if odd else ""))
     L.append(f"- Описаний с фразой-добивкой «small visible step»: {len(pad)}" + (f" (id {', '.join(pad[:12])}{'…' if len(pad) > 12 else ''})" if pad else ""))
     # social
     import social as S
@@ -78,7 +80,6 @@ def main():
     L += ["", "## Партии"]
     L.append("- Файлов в корне, ждущих слияния: " + (", ".join(sorted(glob.glob("pins_batch_*.csv") + glob.glob("pins_patch_*.csv") + glob.glob("social_batch_*.csv"))) or "нет"))
     if rej:
-        n = 0
         for f in rej:
             with open(f, encoding="utf-8-sig", newline="") as fh:
                 ids = [r.get("id") for r in csv.DictReader(fh) if r.get("id") not in have]
