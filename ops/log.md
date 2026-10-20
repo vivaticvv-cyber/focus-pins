@@ -10,3 +10,4 @@
 2026-10-19 | Grok | Claude fixes applied: delete restore-publish.yml; merge_batch + merge_social rewritten (per-row, no auto-pad); Facebook PATTERN=(3,(0,)); remove root pins_patch_1.csv
 2026-10-19 | Grok | TODO next: rewrite 47 descriptions 264–311 (remove pad phrase) via pins_patch_2+
 2026-10-20 | Grok | Daily check: pins=311 (info ready 32 low), Daily #40 success, Autopilot #22 failure (Buffer publish), social_batch_1 leftover, STATUS: TODO
+2026-10-20 | Grok | Insurance: fixed social_publish.py SyntaxError, deleted leftovers (social_batch_1 + patches), pushed pins_batch_1 (312-316 info), triggered merge
