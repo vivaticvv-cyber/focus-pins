@@ -19,4 +19,4 @@
 2026-10-20 | Grok | Autopilot #23 success (X SX006 Buffer 17:56 Kyiv); #24 success (heal_social 10, images S021-025/SX021)
 2026-10-20 | Grok | Decision: keep Grok Automations 4:30 + continue 4:45-7:00 (do not move to 3:30)
 2026-10-20 | Grok | STATUS: DONE; chat handoff recommended (context heavy)
-2026-10-20 | Grok | Claude help-4: product_pins.py + product_specs.csv (34 specs) added; autopilot_prep calls product_pins.py; generate.py temporarily broken (restore from 87d63537 + 2-line skip for product pin) — next action restore generate.py
+2026-10-20 | Grok | Claude help-4: product_pins.py + product_specs.csv (34 specs) + autopilot_prep call + generate.py skip — **COMPLETE**. Продуктовые пины теперь рисуются Autopilot без Claude.
