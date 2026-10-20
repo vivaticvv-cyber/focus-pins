@@ -13,3 +13,4 @@
 2026-10-20 | Grok | Insurance: fixed social_publish.py SyntaxError, deleted leftovers (social_batch_1 + patches), pushed pins_batch_1 (312-316 info), triggered merge
 2026-10-20 | Grok | Insurance: confirmed merge 312-316 (pins.csv=316), pushed pins_batch_2 (317-321 info), triggered merge; stock still low
 2026-10-20 | Grok | Insurance: confirmed partial merge 317-321 (pins.csv max 319), pushed pins_batch_3 (322-326 info, valid scenes), triggered merge; stock still low
+2026-10-20 | Grok | Claude help-2: restored social_publish.py from 56a4622 + PATTERN; autopilot_prep + heal_social; pins_batch_3_fix (315,318,320,321) merged; backup-before-edit rule added
