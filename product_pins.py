@@ -3,13 +3,14 @@
 Как это работает:
   1) в pins.csv добавляется строка пина: board «FOCUS – ADHD Planner», status=new,
      scene_prompt = product pin (pinterest_product.py), link = страница товара, pin_title/description как обычно;
-  2) в product_specs.csv добавляется строка с тем же id: раскладка, палитра, заголовок на картинке, какие страницы/стикеры/экраны;
+  2) в product_specs.csv (или в новый файл product_specs_<N>.csv) добавляется строка с тем же id: раскладка, палитра, заголовок на картинке, какие страницы/стикеры/экраны;
   3) этот скрипт (Autopilot запускает его каждый раз) рисует images/<id>.jpg из реальных материалов assets/showcase/
      и ставит строке status=ready.
 Если строки в product_specs.csv нет или в ней ошибка, строка остаётся new, а причина печатается ::warning:: (запуск не падает).
 Запуск вручную: python product_pins.py [--check]   (--check только проверяет, ничего не рисует)
 """
 import csv
+import glob
 import os
 import sys
 
@@ -93,11 +94,16 @@ def build(row):
 
 def main(argv):
     check = "--check" in argv
-    if not os.path.exists(SPEC_FILE):
-        print(f"{SPEC_FILE} нет — продуктовых пинов для отрисовки нет.")
+    files = sorted(glob.glob("product_specs*.csv"))   # product_specs.csv + любые product_specs_<N>.csv
+    if not files:
+        print("product_specs*.csv нет — продуктовых пинов для отрисовки нет.")
         return 0
-    with open(SPEC_FILE, encoding="utf-8-sig", newline="") as f:
-        specs = {r["id"].strip(): r for r in csv.DictReader(f) if (r.get("id") or "").strip()}
+    specs = {}
+    for fn in files:
+        with open(fn, encoding="utf-8-sig", newline="") as f:
+            for r in csv.DictReader(f):
+                if (r.get("id") or "").strip():
+                    specs[r["id"].strip()] = r
     rows, header = P.load_rows("pins.csv")
     done = bad = 0
     for r in rows:
@@ -119,7 +125,7 @@ def main(argv):
             r["status"] = "ready"
             done += 1
             print(f"OK пин {r['id']}: {spec['layout']} -> images/{r['id']}.jpg")
-        except Exception as e:  # одна плохая строка не блокирует остальные
+        except Exception as e:
             print(f"::warning::пин {r['id']}: {e}")
             bad += 1
     if done:
