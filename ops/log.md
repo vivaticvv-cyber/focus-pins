@@ -19,3 +19,4 @@
 2026-10-20 | Grok | STATUS: DONE; chat handoff recommended (context heavy)
 2026-10-20 | Grok | Claude help-4: product_pins.py + product_specs.csv (34 specs) + autopilot_prep call + generate.py skip — **COMPLETE**. Продуктовые пины теперь рисуются Autopilot без Claude.
 2026-10-21 | Grok | Daily check: pins=326 (ready info 31 low), Daily #42 success, Autopilot #25 success, pushed pins_batch_7 (327-334 info), STATUS: TODO
+2026-10-21 | Grok | Insurance: confirmed merge batch_7 (pins.csv=334), pushed pins_batch_8 (335-342 info), STATUS: TODO continue stock
