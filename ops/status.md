@@ -1,6 +1,6 @@
 # FOCUS ops status
 
-**Updated:** 2026-10-21 ~22:55 Kyiv (Grok)
+**Updated:** 2026-10-21 ~23:00 Kyiv (Grok)
 
 ## STATUS: DONE
 
@@ -23,6 +23,7 @@
 ### Next batch due: 2026-10-28
 Квота к ближайшему вторнику (04.11): **+0 info / +6 promo** (из графика help-6).  
 Далее еженедельно ≈52 info + 15 promo (половина promo — product pins через product_specs_N.csv).
+MAX_PER_DAY = **10** (подтверждено владельцем 21.10).
 
 ### STATUS rules (help-6 §4)
 1. STATUS: DONE = последний цикл без отклонений **и** выполнена недельная квота; иначе IN PROGRESS с остатком.
@@ -34,5 +35,8 @@
 - FOCUS batch continue 04:45–07:00 работает как insurance.
 
 ### NEED OWNER (осталось)
-- Решение по MAX_PER_DAY (сейчас 10).
-- metrics.md: 25.10 и 31.10.
+- **metrics.md**: полная автоматизация продаж Gumroad сейчас невозможна без одноразового доступа (Gumroad API token с scope view_sales или webhook). Социальные метрики (Buffer) можно частично автоматизировать.  
+  Варианты:  
+  a) дать один раз Gumroad access token → я настрою опрос;  
+  b) оставить ручное заполнение 25.10 и 31.10 (2 минуты);  
+  c) временно считать только «продажи = 0 / >0» по публичным признакам (менее точно).
