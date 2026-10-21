@@ -26,3 +26,4 @@
 2026-10-21 | Grok | help-5 COMPLETE: Merge #19 (fix 5/5 + batch_11 12/12 + patch 339, 0 reject); Autopilot #27 product 349–354 ready; pins.csv=360; STATUS: DONE
 2026-10-21 | Grok | help-6 applied: ops-report.yml + workflow_run; status rules (no Idle, Next batch due, quota); weekly schedule §1.1; NEED OWNER: create Automation task (help-6 §1.2)
 2026-10-21 | Grok | Automation limit reached → enhanced existing «FOCUS daily ops check» (04:30) with full weekly quota logic + 21-day threshold; closed NEED OWNER Automation item. STATUS remains DONE.
+2026-10-21 | Grok | MAX_PER_DAY=10 confirmed by owner. Full metrics auto (Gumroad sales) blocked without one-time API token/webhook; social metrics partially possible via Buffer.
