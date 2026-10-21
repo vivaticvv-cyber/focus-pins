@@ -1,6 +1,6 @@
 # FOCUS ops status
 
-**Updated:** 2026-10-21 ~22:30 Kyiv (Grok, help-6 applied)
+**Updated:** 2026-10-21 ~22:55 Kyiv (Grok)
 
 ## STATUS: DONE
 
@@ -29,7 +29,10 @@
 2. В каждом статусе: `Next batch due: <дата>` + числа запаса из auto-status.
 3. Слово «Idle» не используется. После DONE всегда указана дата следующей сессии.
 
-### NEED OWNER
-- Создать Automation в Grok (Tasks) с текстом из help-6 §1.2 (каждые 2 дня, утро Киев). Без этого производство остановится при отсутствии чата.
+### Automation
+- FOCUS daily ops check (04:30 Киев) **усилен** логикой недельной квоты help-6 §1.1 + threshold 21 дн. Новая отдельная Automation не создана (лимит тарифа).
+- FOCUS batch continue 04:45–07:00 работает как insurance.
+
+### NEED OWNER (осталось)
 - Решение по MAX_PER_DAY (сейчас 10).
 - metrics.md: 25.10 и 31.10.
