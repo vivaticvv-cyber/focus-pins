@@ -1,24 +1,28 @@
 # FOCUS ops status
 
-**Updated:** 2026-10-21 12:15 Kyiv (Grok, help-5)
+**Updated:** 2026-10-21 12:25 Kyiv (Grok, help-5 complete)
 
-## STATUS: TODO (ожидает Autopilot / merge)
+## STATUS: DONE
 
-### Applied from Claude help-5
-- `pins_batch_10_fix.csv` — исправление 5 отклонённых (328, 329, 332, 346, 347)
-- `pins_patch_9.csv` — сцена 339 без «reading»
-- `product_pins.py` — читает все `product_specs*.csv`
-- `pins_batch_11.csv` + `product_specs_11.csv` — 12 промо/продуктовых (349–360)
+### help-5 results
+- Merge #19: pins_batch_10_fix **5/5**, pins_batch_11 **12/12**, patch 339 applied — **0 отклонений**
+- Autopilot #27: product pins **349–354 нарисованы**, status=ready, images есть
+- pins.csv: **360** (max id 360), gaps 328/329/332/346/347 закрыты
+- 339: сцена без «reading»
+- product_pins.py: читает product_specs*.csv
+- Root: batches убраны; product_specs_11.csv остаётся (нужен скрипту)
 
-### Current numbers (до merge)
-- pins.csv: **343** (max id 348; gaps 328/329/332/346/347)
-- После успешного merge: ожидается **360**, gaps закрыты, product 349–354 → ready после отрисовки
-
-### Next
-1. Autopilot run → merge fix + batch 11 + product_pins нарисует 349–354
-2. Проверить `_report.md` / auto-status: 0 отклонений по 328–347 и 349–360
-3. STATUS: DONE только при пустом списке отклонений
+### Current numbers
+- pins.csv: **360**
+- ready+new info: здоровый запас
+- Promo runway extended (~до 24.11 с партией 11)
+- Pad=0, shifted=0
 
 ### GitHub Actions
-- Ожидаем следующий Autopilot / Daily
-- product pins automation live (help-4 + help-5 glob)
+- Merge #19 success
+- Autopilot #27 success
+- Daily #43 success (earlier)
+
+### Next
+- Idle до снижения stock или следующего расписания
+- STATUS DONE только при пустом списке отклонений — сейчас пусто
