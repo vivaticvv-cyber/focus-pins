@@ -22,3 +22,4 @@
 2026-10-21 | Grok | Merge #15 batch_7: 5 accepted / 3 rejected (328 title-repeat, 329/332 hands-face); batch_8 pushed+merged #16-17: 7 accepted / 1 rejected (337 laptop); pins≈341
 2026-10-21 | Grok | Insurance: pushed pins_batch_9 (337 fix + 343-348 info), STATUS: TODO merge
 2026-10-21 | Grok | Insurance: merge #18 batch_9 success, pins.csv=343, root clean, ready+new info ~223 healthy, STATUS: DONE
+2026-10-21 | Grok | Claude help-5 applied: pins_batch_10_fix (328/329/332/346/347), pins_patch_9 (339 scene), product_pins.py glob product_specs*.csv, pins_batch_11 + product_specs_11 (349–360). STATUS: TODO до merge/Autopilot.
