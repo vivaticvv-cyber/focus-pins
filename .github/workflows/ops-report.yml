@@ -2,6 +2,9 @@ name: Ops report
 on:
   schedule:
     - cron: "40 4 * * *"      # раз в сутки, после ночных запусков
+  workflow_run:
+    workflows: ["Autopilot", "Daily pins", "Merge pins batch"]
+    types: [completed]
   workflow_dispatch:
 concurrency:
   group: pins
