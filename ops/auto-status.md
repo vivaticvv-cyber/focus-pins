@@ -1,17 +1,17 @@
-# Auto status (ops_report.py) — 2026-10-20 09:49 UTC
+# Auto status (ops_report.py) — 2026-10-21 09:33 UTC
 
 ## Pinterest (pins.csv)
-- Строк 326: new 196, published 65, ready 63, scheduled 2
-- Неопубликованных информационных (new+ready): 211; хватит до 2026-11-23; до 2027-01-14 докупить ≈ 391
-- Неопубликованных промо (new+ready): 48; хватит до 2026-11-17; до 2027-01-14 докупить ≈ 122
-- Запас информационных: 34 дн. → в норме
+- Строк 360: new 220, published 68, ready 66, scheduled 6
+- Неопубликованных информационных (new+ready): 228; хватит до 2026-11-26; до 2027-01-14 докупить ≈ 369
+- Неопубликованных промо (new+ready): 58; хватит до 2026-11-23; до 2027-01-14 докупить ≈ 110
+- Запас информационных: 36 дн. → в норме
 - lint pins.csv: замечаний нет
 - Строк new со сдвинутыми колонками (служебные поля заполнены): 0
 - Описаний с фразой-добивкой «small visible step»: 0
 
 ## Facebook/X (social.csv)
 - S (Facebook, Buffer): ready 21 (без картинки: 0), new 0, scheduled/published 2
-- SX (X, Buffer): ready 16 (без картинки: 0), new 4, scheduled/published 3
+- SX (X, Buffer): ready 20 (без картинки: 0), new 0, scheduled/published 3
 - M (Facebook, Metricool): ready 20 (без картинки: 0), new 0, scheduled/published 0
 
 ## Партии
@@ -19,13 +19,13 @@
 - Отклонённых строк нет
 
 ## Последние запуски Actions
-- 10-20T09:49 Ops report: in_progress
-- 10-20T09:48 Check code: success
-- 10-20T09:48 Ops report: success
-- 10-20T09:43 Merge pins batch: success
-- 10-20T09:41 Merge pins batch: success
-- 10-20T09:36 Merge pins batch: success
-- 10-20T09:27 Check code: success
-- 10-20T09:27 Check code: success
-- 10-20T09:27 Merge pins batch: success
-- 10-20T09:26 Fix merge_batch syntax: success
+- 10-21T09:33 Ops report: in_progress
+- 10-21T09:21 Autopilot: success
+- 10-21T09:20 Merge pins batch: success
+- 10-21T09:17 Check code: success
+- 10-21T08:47 Daily pins: success
+- 10-21T08:01 Autopilot: success
+- 10-21T01:48 Merge pins batch: success
+- 10-21T01:46 Merge pins batch: success
+- 10-21T01:46 Merge pins batch: success
+- 10-21T01:45 Merge pins batch: success
