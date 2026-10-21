@@ -1,5 +1,3 @@
-# FOCUS ops log
-
 2026-10-19 | Grok | Created ops/ + PROJECT.md + ADHD rule
 2026-10-19 | Grok | Autopilot #14: batches rejected (short descriptions)
 2026-10-19 | Grok | Permanent fix: merge_batch auto-pad + independent per-file merge
@@ -20,3 +18,4 @@
 2026-10-20 | Grok | Decision: keep Grok Automations 4:30 + continue 4:45-7:00 (do not move to 3:30)
 2026-10-20 | Grok | STATUS: DONE; chat handoff recommended (context heavy)
 2026-10-20 | Grok | Claude help-4: product_pins.py + product_specs.csv (34 specs) + autopilot_prep call + generate.py skip — **COMPLETE**. Продуктовые пины теперь рисуются Autopilot без Claude.
+2026-10-21 | Grok | Daily check: pins=326 (ready info 31 low), Daily #42 success, Autopilot #25 success, pushed pins_batch_7 (327-334 info), STATUS: TODO
