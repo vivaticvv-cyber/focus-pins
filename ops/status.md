@@ -1,26 +1,30 @@
 # FOCUS ops status
 
-**Updated:** 2026-10-22 ~04:40 Kyiv (Grok)
+**Updated:** 2026-10-22 ~18:45 Kyiv (Grok)
 
 ## STATUS: DONE
 
 ### Daily run 22.10
-- Auto-status fresh (00:42 UTC), Actions green (Daily #44, Autopilot #28, Ops report #6)
-- No leftovers in root
-- Weekly quota to 04.11: +0 info / +6 promo → wrote pins_batch_12.csv (361–366, 3 product + 3 mascot) + product_specs_12.csv
-- Merge #20 success: 6/6 accepted, 0 reject
-- Autopilot triggered for product images
+- Auto-status fresh, Actions green (Daily #44, Autopilot #28/#29, Merge #20, Ops report)
+- Weekly quota to 04.11: +0 info / +6 promo → pins_batch_12 (361–366) + product_specs_12 merged 6/6, 0 reject
 
-### Current numbers (from auto-status 22.10 00:42 UTC + this batch)
-- pins.csv: **366** (new ~221, ready ~71, etc.)
+### Current numbers (auto-status 22.10 01:39 UTC)
+- pins.csv: **366** (new 218, ready 68, scheduled 6, published 74)
 - Info runway: 223 (~to 25.11), **34 days** → normal
-- Promo runway: ~63 (~to ~29.11)
+- Promo runway: 63 (~to ~26.11)
 - Social: S/SX/M ready 20; 0 without image
 - Pad=0, shifted=0, reject=0
 
 ### Next batch due: 2026-10-28
-Quota met for nearest Tuesday (04.11). Next weekly ~52 info + 15 promo starting 28.10.
+Quota met for 04.11. Next weekly ~52 info + 15 promo from 28.10.
 MAX_PER_DAY = **10**.
+
+### Gumroad (verified 22.10)
+- Access token working (view_sales confirmed).
+- Paid sales: **0**
+- Free trial (FOCUS Mini / dwshkr): **1** download
+- Products: Soft Structure, seqen, Premium Pack, Mini — all present
+- metrics.md can now be filled automatically by Grok (no owner action needed for 25.10 / 31.10)
 
 ### STATUS rules (help-6 §4)
 1. STATUS: DONE = last cycle 0 rejects **and** weekly quota met; else IN PROGRESS with remainder.
@@ -28,8 +32,9 @@ MAX_PER_DAY = **10**.
 3. Never use word «Idle».
 
 ### Automation
-- FOCUS daily ops check (04:30 Kyiv) enhanced with weekly quota + 21-day threshold.
-- FOCUS batch continue 04:45–07:00 as insurance.
+- FOCUS daily ops check (04:30 Kyiv) — weekly quota + 21-day threshold.
+- FOCUS batch continue 04:45–07:00 — insurance.
+- Gumroad sales pull — available to Grok on demand / daily.
 
-### NEED OWNER (remaining)
-- **metrics.md**: full Gumroad sales auto needs one-time API token (view_sales) or webhook. Social metrics partial via Buffer. Options: provide token once, or manual 25.10 & 31.10 (2 min), or rough public signals.
+### NEED OWNER
+- None critical. (Token received and verified.)
