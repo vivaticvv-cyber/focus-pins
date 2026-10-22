@@ -1,42 +1,35 @@
 # FOCUS ops status
 
-**Updated:** 2026-10-21 ~23:00 Kyiv (Grok)
+**Updated:** 2026-10-22 ~04:40 Kyiv (Grok)
 
 ## STATUS: DONE
 
-### help-6 results
-- ops-report.yml: добавлен `workflow_run` после Autopilot / Daily pins / Merge pins batch → auto-status всегда свежий
-- Правила статуса обновлены (раздел ниже): нет «Idle», всегда Next batch due, DONE только при квоте + 0 reject
-- Недельный график производства (из help-6 §1.1) внесён; порог тревоги запаса = 21 день
-- Банк идей (73 info + 27 promo) сохранён в FOCUS-grok-help-6.md (артефакт / контекст)
+### Daily run 22.10
+- Auto-status fresh (00:42 UTC), Actions green (Daily #44, Autopilot #28, Ops report #6)
+- No leftovers in root
+- Weekly quota to 04.11: +0 info / +6 promo → wrote pins_batch_12.csv (361–366, 3 product + 3 mascot) + product_specs_12.csv
+- Merge #20 success: 6/6 accepted, 0 reject
+- Autopilot triggered for product images
 
-### Current numbers (из auto-status 21.10 09:33 UTC)
-- pins.csv: **360** (new 220, ready 66, scheduled 6, published 68)
-- Info runway: 228 (~до 26.11), **36 дн.** → норма
-- Promo runway: 58 (~до 23.11)
-- Social: S ready 21, SX ready 20, M ready 20; 0 без картинки
+### Current numbers (from auto-status 22.10 00:42 UTC + this batch)
+- pins.csv: **366** (new ~221, ready ~71, etc.)
+- Info runway: 223 (~to 25.11), **34 days** → normal
+- Promo runway: ~63 (~to ~29.11)
+- Social: S/SX/M ready 20; 0 without image
 - Pad=0, shifted=0, reject=0
 
-### GitHub Actions
-- Merge #19 success, Autopilot #27 success, Daily #43 success, Check code green
-
 ### Next batch due: 2026-10-28
-Квота к ближайшему вторнику (04.11): **+0 info / +6 promo** (из графика help-6).  
-Далее еженедельно ≈52 info + 15 promo (половина promo — product pins через product_specs_N.csv).
-MAX_PER_DAY = **10** (подтверждено владельцем 21.10).
+Quota met for nearest Tuesday (04.11). Next weekly ~52 info + 15 promo starting 28.10.
+MAX_PER_DAY = **10**.
 
 ### STATUS rules (help-6 §4)
-1. STATUS: DONE = последний цикл без отклонений **и** выполнена недельная квота; иначе IN PROGRESS с остатком.
-2. В каждом статусе: `Next batch due: <дата>` + числа запаса из auto-status.
-3. Слово «Idle» не используется. После DONE всегда указана дата следующей сессии.
+1. STATUS: DONE = last cycle 0 rejects **and** weekly quota met; else IN PROGRESS with remainder.
+2. Always include `Next batch due: <date>` + stock numbers from auto-status.
+3. Never use word «Idle».
 
 ### Automation
-- FOCUS daily ops check (04:30 Киев) **усилен** логикой недельной квоты help-6 §1.1 + threshold 21 дн. Новая отдельная Automation не создана (лимит тарифа).
-- FOCUS batch continue 04:45–07:00 работает как insurance.
+- FOCUS daily ops check (04:30 Kyiv) enhanced with weekly quota + 21-day threshold.
+- FOCUS batch continue 04:45–07:00 as insurance.
 
-### NEED OWNER (осталось)
-- **metrics.md**: полная автоматизация продаж Gumroad сейчас невозможна без одноразового доступа (Gumroad API token с scope view_sales или webhook). Социальные метрики (Buffer) можно частично автоматизировать.  
-  Варианты:  
-  a) дать один раз Gumroad access token → я настрою опрос;  
-  b) оставить ручное заполнение 25.10 и 31.10 (2 минуты);  
-  c) временно считать только «продажи = 0 / >0» по публичным признакам (менее точно).
+### NEED OWNER (remaining)
+- **metrics.md**: full Gumroad sales auto needs one-time API token (view_sales) or webhook. Social metrics partial via Buffer. Options: provide token once, or manual 25.10 & 31.10 (2 min), or rough public signals.
