@@ -1,18 +1,19 @@
 # FOCUS ops status
 
-**Updated:** 2026-10-22 ~18:45 Kyiv (Grok)
+**Updated:** 2026-10-23 ~04:37 Kyiv (Grok)
 
 ## STATUS: DONE
 
-### Daily run 22.10
-- Auto-status fresh, Actions green (Daily #44, Autopilot #28/#29, Merge #20, Ops report)
-- Weekly quota to 04.11: +0 info / +6 promo → pins_batch_12 (361–366) + product_specs_12 merged 6/6, 0 reject
+### Daily run 23.10
+- Auto-status fresh (<24h), Actions green (Daily #46, Autopilot #31, Merge #20, Ops report)
+- Root cleaned: deleted leftover product_specs_11.csv + product_specs_12.csv (already merged)
+- Weekly quota met (to 04.11), info runway 34d >21, no production needed
 
-### Current numbers (auto-status 22.10 01:39 UTC)
-- pins.csv: **366** (new 218, ready 68, scheduled 6, published 74)
-- Info runway: 223 (~to 25.11), **34 days** → normal
-- Promo runway: 63 (~to ~26.11)
-- Social: S/SX/M ready 20; 0 without image
+### Current numbers (auto-status 23.10 00:41 UTC)
+- pins.csv: **366** (new 213, ready 67, scheduled 6, published 80)
+- Info runway: 219 (~to 26.11), **34 days** → normal
+- Promo runway: 61 (~to 25.11)
+- Social: S ready 20, SX ready 19, M ready 20; 0 without image
 - Pad=0, shifted=0, reject=0
 
 ### Next batch due: 2026-10-28
