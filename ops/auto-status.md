@@ -1,4 +1,4 @@
-# Auto status (ops_report.py) — 2026-10-24 07:42 UTC
+# Auto status (ops_report.py) — 2026-10-24 07:53 UTC
 
 ## Pinterest (pins.csv)
 - Строк 366: new 208, published 88, ready 66, scheduled 4
@@ -12,20 +12,20 @@
 ## Facebook/X (social.csv)
 - S (Facebook, Buffer): ready 20 (без картинки: 0), new 0, scheduled/published 3
 - SX (X, Buffer): ready 18 (без картинки: 0), new 0, scheduled/published 5
-- M (Facebook, Metricool): ready 33 (без картинки: 0), new 7, scheduled/published 0
+- M (Facebook, Metricool): ready 40 (без картинки: 0), new 0, scheduled/published 0
 
 ## Партии
 - Файлов в корне, ждущих слияния: нет
 - Отклонённых строк нет
 
 ## Последние запуски Actions
-- 10-24T07:41 Ops report: pending
-- 10-24T07:39 Ops report: in_progress
+- 10-24T07:53 Ops report: in_progress
+- 10-24T07:52 Autopilot: success
+- 10-24T07:41 Ops report: success
+- 10-24T07:39 Ops report: success
 - 10-24T07:37 Autopilot: success
 - 10-24T07:35 Ops report: cancelled
 - 10-24T07:33 Daily pins: success
 - 10-24T07:33 Autopilot: success
 - 10-24T07:22 Check code: success
 - 10-24T07:04 Check code: success
-- 10-24T07:03 Check code: failure
-- 10-24T03:46 Ops report: success
