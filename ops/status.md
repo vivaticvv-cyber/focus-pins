@@ -1,22 +1,23 @@
 # FOCUS ops status
 
-**Updated:** 2026-10-24 ~04:40 Kyiv (Grok)
+**Updated:** 2026-10-24 ~04:50 Kyiv (Grok insurance)
 
 ## STATUS: IN PROGRESS
 
 ### Daily run 24.10
-- Auto-status fresh (00:40 UTC), Actions green (Daily #48, Autopilot #33, Ops report)
-- Fixed social_batch_2.csv: M021–M040 status ready→new so Autopilot stocks images
-- Triggered Autopilot to merge batch + start image generation
-- Pins quota met, no new pins needed
+- Auto-status fresh, Actions green
+- social_batch_2.csv still in root (ids already in social.csv, merge skips)
+- M images: M021–M026 stocked; ~14 new remaining
+- Triggered Autopilot #35 to move batch + stock next 6 images
+- Pins quota met (366), runway 33d normal
 
-### Current numbers (auto-status 24.10 00:40 UTC)
+### Current numbers (auto-status 24.10 01:40 UTC)
 - pins.csv: **366** (new 208, ready 66, scheduled 6, published 86)
 - Info runway: 214 (~to 26.11), **33 days** → normal (>21)
 - Promo runway: 60 (~to 25.11)
-- Social: S ready 20, SX ready 18, M ready 40 (M021–M040 waiting images)
+- Social: S ready 20, SX ready 18, M ready 26 + new 14 (images stocking)
 - Pad=0, shifted=0, reject=0
-- Root waiting: social_batch_2.csv (now status=new)
+- Root waiting: social_batch_2.csv
 
 ### Next batch due: 2026-10-28
 Quota met for 04.11. Next weekly ~52 info + 15 promo from 28.10.
