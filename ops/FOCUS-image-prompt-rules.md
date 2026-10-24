@@ -21,17 +21,17 @@
 
 | Плохо | Хорошо |
 |-------|--------|
-| no numbers, no writing | smooth blank cream pages with no marks |
+| no numbers, no writing | smooth blank cream pages |
 | monthly grid of seven columns | single standing desk calendar, solid teal band on top |
 | blank calendar without text | thick cream paper block, solid soft teal band across the top |
-| a pair of boots | one boot beside another boot / two boots side by side (и всё равно проверять) |
+| a pair of boots | one boot |
 
 ## Календарь (M010 и аналоги)
 
 Не рисовать месячную сетку. Метафора «один календарь»:
 
 ```
-A single standing desk calendar on a wooden table, thick cream paper block with a solid soft teal band across the top, smooth blank cream pages with no marks, metal ring binding along the top edge, warm peach wall behind, gentle daylight from the left, everything fully visible and brightly lit
+A single standing desk calendar on a wooden table, thick cream paper block with a solid soft teal band across the top, smooth blank cream pages, metal ring binding along the top edge, warm peach wall behind, gentle daylight from the left, everything fully visible and brightly lit
 ```
 
 Style column: `clay3d`.
