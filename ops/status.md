@@ -1,21 +1,21 @@
 # FOCUS ops status
 
-**Updated:** 2026-10-24 ~05:45 Kyiv (Grok insurance)
+**Updated:** 2026-10-24 ~06:45 Kyiv (Grok insurance)
 
 ## STATUS: IN PROGRESS
 
 ### Daily run 24.10
-- Auto-status fresh, Actions green
-- Deleted leftover social_batch_2.csv (ids already in social.csv)
-- M images: ready 32 (M021–M032), new 8 remaining
-- Triggered Autopilot to stock next 6 images
+- Auto-status fresh (02:48 UTC), Actions green
+- Leftover social_batch_2.csv deleted earlier
+- M images: ready 38, new 2 remaining (M039, M040)
+- Triggered Autopilot to stock remaining images
 - Pins quota met (366), runway 33d normal
 
-### Current numbers (auto-status 24.10 01:48 UTC)
+### Current numbers (auto-status 24.10 02:48 UTC)
 - pins.csv: **366** (new 208, ready 66, scheduled 6, published 86)
 - Info runway: 214 (~to 26.11), **33 days** → normal (>21)
 - Promo runway: 60 (~to 25.11)
-- Social: S ready 20, SX ready 18, M ready 32 + new 8 (images stocking)
+- Social: S ready 20, SX ready 18, M ready 38 + new 2 (images stocking)
 - Pad=0, shifted=0, reject=0
 - Root waiting: none
 
