@@ -305,8 +305,8 @@ def check_connection(client):
 
 
 # ------------------------------------------------------------------ основной запуск
-def run(mode=\"run\", now=None, client=None, csv_path=CSV, root=\".\", rng=None, url_ok=None):
-    dry = mode == \"dry-run\"
+def run(mode="run", now=None, client=None, csv_path=CSV, root=".", rng=None, url_ok=None):
+    dry = mode == "dry-run"
     now = now or P.now_kyiv()
     url_ok = url_ok or P.url_reachable
     rows, header = load(csv_path)
@@ -317,177 +317,180 @@ def run(mode=\"run\", now=None, client=None, csv_path=CSV, root=\".\", rng=None,
     if P.mark_published(rows, now) and not dry:
         save(rows, header, csv_path)
 
-    for net in cfg(\"CHANNELS\"):
+    for net in cfg("CHANNELS"):
         plan = posts_for_day(net, today, external)
-        why = \"\"
+        why = ""
         if plan == 0:
             busy = any(d.date() == today for d in external.get(net, ()))
-            why = \" (в этот день уже есть пост Metricool/Typefully)\" if busy else \\
-                  f\" (старт {net_start(net)}, день вне шаблона)\"
-        print(f\"[{net}] {today}: по плану постов {plan}{why}\")
+            why = " (в этот день уже есть пост Metricool/Typefully)" if busy else \
+                  f" (старт {net_start(net)}, день вне шаблона)"
+        print(f"[{net}] {today}: по плану постов {plan}{why}")
         if plan == 0:
             continue
         remote = None
         if client is not None:
             try:
-                remote = fetch_scheduled(client, cfg(\"CHANNELS\")[net])
+                remote = fetch_scheduled(client, cfg("CHANNELS")[net])
             except P.BufferAuthError:
                 raise
             except P.BufferError as e:
-                print(f\"::warning::[{net}] не удалось прочитать очередь Buffer ({e}); продолжаю без сверки\")
+                print(f"::warning::[{net}] не удалось прочитать очередь Buffer ({e}); продолжаю без сверки")
         if remote:
-            by_text = {(p.get(\"text\") or \"\").strip(): p for p in remote}
+            by_text = {(p.get("text") or "").strip(): p for p in remote}
             for r in rows:
-                if r[\"network\"] != net or status(r) != \"ready\":
+                if r["network"] != net or status(r) != "ready":
                     continue
-                t = (r.get(\"text\") or \"\").strip()
-                hit = next((p for tx, p in by_text.items() if tx == t or tx.startswith(t + \" http\")), None)
+                t = (r.get("text") or "").strip()
+                hit = next((p for tx, p in by_text.items() if tx == t or tx.startswith(t + " http")), None)
                 if hit:
-                    due = P.parse_dt(hit.get(\"dueAt\"))
-                    r.update(status=\"scheduled\", post_id=hit[\"id\"],
-                             scheduled_at=due.isoformat(timespec=\"minutes\") if due else \"\")
-                    print(f\"Подхвачен уже запланированный пост {r['id']} ({hit['id']})\")
+                    due = P.parse_dt(hit.get("dueAt"))
+                    r.update(status="scheduled", post_id=hit["id"],
+                             scheduled_at=due.isoformat(timespec="minutes") if due else "")
+                    print(f"Подхвачен уже запланированный пост {r['id']} ({hit['id']})")
             if not dry:
                 save(rows, header, csv_path)
 
-        taken = [d for r in rows if r[\"network\"] == net and status(r) in (\"scheduled\", \"published\")
-                 for d in [P.parse_dt(r.get(\"scheduled_at\"))] if d and d.date() == today]
+        taken = [d for r in rows if r["network"] == net and status(r) in ("scheduled", "published")
+                 for d in [P.parse_dt(r.get("scheduled_at"))] if d and d.date() == today]
         if len(taken) >= plan:
-            print(f\"[{net}] на сегодня уже всё запланировано ({len(taken)}/{plan}).\")
+            print(f"[{net}] на сегодня уже всё запланировано ({len(taken)}/{plan}).")
             continue
         queued = len(remote) if remote is not None else 0
-        if queued >= cfg(\"QUEUE_LIMIT\"):
-            print(f\"::error::[{net}] очередь Buffer заполнена: {queued} из {cfg('QUEUE_LIMIT')}\")
+        if queued >= cfg("QUEUE_LIMIT"):
+            print(f"::error::[{net}] очередь Buffer заполнена: {queued} из {cfg('QUEUE_LIMIT')}")
             red = True
             continue
-        day_rng = rng or random.Random(f\"social-{net}-{today.isoformat()}\")
+        day_rng = rng or random.Random(f"social-{net}-{today.isoformat()}")
         when = make_time(net, today, now, taken, day_rng, recent_hours(net, rows, external, now + timedelta(days=1)))
         if not when:
-            print(f\"::warning::[{net}] в оставшуюся часть окна публикации поста не поместить\")
+            print(f"::warning::[{net}] в оставшуюся часть окна публикации поста не поместить")
             continue
         r = choose(rows, net)
         if not r:
-            print(f\"::error::[{net}] нет готовых строк (status=ready) с подходящим видом/ссылкой — \"
-                  f\"пополните social.csv и запустите «Social images»\")
+            print(f"::error::[{net}] нет готовых строк (status=ready) с подходящим видом/ссылкой — "
+                  f"пополните social.csv и запустите «Social images»")
             red = True
             continue
         errs = validate(r, root, when)
         if errs:
-            print(f\"::error::[{net}] строка {r['id']} пропущена: {'; '.join(errs)}\")
+            print(f"::error::[{net}] строка {r['id']} пропущена: {'; '.join(errs)}")
             red = True
             continue
         text, fc = compose_text(r, when)
-        line = f\"{net:8} {r['id']:>6} [{r.get('kind')}] {when:%H:%M} Киев = {when.astimezone(ET):%H:%M} ET\"
+        line = f"{net:8} {r['id']:>6} [{r.get('kind')}] {when:%H:%M} Киев = {when.astimezone(ET):%H:%M} ET"
         if dry:
-            print(\"DRY  \" + line + f\"\\n     текст: {text[:90]}…\" + (f\"\\n     1-й комментарий: {fc}\" if fc else \"\"))
+            print("DRY  " + line + f"\n     текст: {text[:90]}…" + (f"\n     1-й комментарий: {fc}" if fc else ""))
             continue
-        url = image_url(r[\"image\"])
+        url = image_url(r["image"])
         if not url_ok(url):
-            print(f\"::error::[{net}] {r['id']}: картинка недоступна по {url} (закоммичена ли она?)\")
+            print(f"::error::[{net}] {r['id']}: картинка недоступна по {url} (закоммичена ли она?)")
             red = True
             continue
         try:
             post_id, _ = create_social(client, net=net, text=text, first_comment=fc,
-                                       image_rel=r[\"image\"], due_utc=P.to_utc_z(when))
+                                       image_rel=r["image"], due_utc=P.to_utc_z(when))
         except P.BufferError as e:
             msg = str(e)
             # Free-план Buffer: first comment — платная фича. Не валим весь job.
-            if net == \"facebook\" and fc and (\"first comment\" in msg.lower() or \"paid plan\" in msg.lower()
-                                              or \"upgrade\" in msg.lower() or \"InvalidInput\" in msg):
-                print(f\"::warning::[{net}] Buffer Free: first comment недоступен ({e}). \"
-                      f\"Публикую {r['id']} без первого комментария (ссылка не уйдёт в FB).\")
+            if net == "facebook" and fc and ("first comment" in msg.lower() or "paid plan" in msg.lower()
+                                              or "upgrade" in msg.lower() or "InvalidInput" in msg):
+                print(f"::warning::[{net}] Buffer Free: first comment недоступен ({e}). "
+                      f"Публикую {r['id']} без первого комментария (ссылка не уйдёт в FB).")
                 try:
-                    post_id, _ = create_social(client, net=net, text=text, first_comment=\"\",
-                                               image_rel=r[\"image\"], due_utc=P.to_utc_z(when),
+                    post_id, _ = create_social(client, net=net, text=text, first_comment="",
+                                               image_rel=r["image"], due_utc=P.to_utc_z(when),
                                                use_first_comment=False)
                 except P.BufferError as e2:
-                    print(f\"::error::[{net}] Buffer (без first comment): {e2}. Останавливаюсь; уже запланированное сохранено.\")
+                    print(f"::error::[{net}] Buffer (без first comment): {e2}. Останавливаюсь; уже запланированное сохранено.")
                     save(rows, header, csv_path)
                     return 1
             else:
-                print(f\"::error::[{net}] Buffer: {e}. Останавливаюсь; уже запланированное сохранено.\")
+                print(f"::error::[{net}] Buffer: {e}. Останавливаюсь; уже запланированное сохранено.")
                 save(rows, header, csv_path)
                 return 1
-        r.update(status=\"scheduled\", scheduled_at=when.isoformat(timespec=\"minutes\"), post_id=post_id)
+        r.update(status="scheduled", scheduled_at=when.isoformat(timespec="minutes"), post_id=post_id)
         save(rows, header, csv_path)
-        print(\"OK   \" + line + f\"  (post {post_id})\")
+        print("OK   " + line + f"  (post {post_id})")
     return 1 if red else 0
 
 
 # ------------------------------------------------------------------ lint и plan
-def lint(csv_path=CSV, root=\".\"):
+def lint(csv_path=CSV, root="."):
     rows, _ = load(csv_path)
     bad = ready = 0
     when = datetime(2026, 11, 2, 12, 0, tzinfo=P.kyiv())
     for r in rows:
-        if status(r) != \"ready\":
+        if status(r) != "ready":
             continue
         ready += 1
-        errs = validate(r, root, when)
-        if errs:
+        msgs = validate(r, root, when)
+        if msgs:
             bad += 1
-            print(f\"{r['id']}: {'; '.join(errs)}\")
-    print(f\"ready: {ready}, с ошибками: {bad}\")
+            print(f"{r['id']}: " + "; ".join(msgs))
+    left = {n: sum(1 for r in rows if r["network"] == n and status(r) == "ready") for n in cfg("CHANNELS")}
+    new = {n: sum(1 for r in rows if r["network"] == n and status(r) == "new") for n in cfg("CHANNELS")}
+    print(f"Готовых строк: {ready} (Facebook {left['facebook']}, X {left['x']}); ждут картинок: "
+          f"Facebook {new['facebook']}, X {new['x']}; с замечаниями: {bad}")
     return 1 if bad else 0
 
 
 def print_plan(days=30):
     external = load_external()
     today = P.now_kyiv()
-    d0 = min(net_start(n) for n in cfg(\"CHANNELS\"))
+    d0 = min(net_start(n) for n in cfg("CHANNELS"))
     d0 = max(d0, today.date())
-    print(\"дата         Facebook                          X       (B = Buffer, время Киев/ET; m, t = Metricool, Typefully)\")
-    tot = {n: 0 for n in cfg(\"CHANNELS\")}
-    chron = {n: list(external.get(n, [])) for n in cfg(\"CHANNELS\")}      # как в боевом запуске: час не повторяется
+    print("дата         Facebook                          X       (B = Buffer, время Киев/ET; m, t = Metricool, Typefully)")
+    tot = {n: 0 for n in cfg("CHANNELS")}
+    chron = {n: list(external.get(n, [])) for n in cfg("CHANNELS")}      # как в боевом запуске: час не повторяется
     for i in range(days):
         d = d0 + timedelta(days=i)
         cells = []
-        for net in (\"facebook\", \"x\"):
-            c = \"\"
+        for net in ("facebook", "x"):
+            c = ""
             if posts_for_day(net, d, external):
-                prev = sorted(x for x in chron[net] if x.date() < d)[-cfg(\"RECENT_HOURS_N\"):]
-                t = make_time(net, d, today - timedelta(days=2), [], random.Random(f\"social-{net}-{d.isoformat()}\"),
+                prev = sorted(x for x in chron[net] if x.date() < d)[-cfg("RECENT_HOURS_N"):]
+                t = make_time(net, d, today - timedelta(days=2), [], random.Random(f"social-{net}-{d.isoformat()}"),
                               {x.astimezone(ET).hour for x in prev})
-                c = f\"B {t:%H:%M}/{t.astimezone(ET):%H:%M}\" if t else \"B ?\"
+                c = f"B {t:%H:%M}/{t.astimezone(ET):%H:%M}" if t else "B ?"
                 if t:
                     chron[net].append(t)
                 tot[net] += 1
             ext = [e for e in external.get(net, []) if e.date() == d]
             if ext:
-                c += (\" \" if c else \"\") + (\"m\" if net == \"facebook\" else \"t\") + f\" {ext[0]:%H:%M}\"
+                c += (" " if c else "") + ("m" if net == "facebook" else "t") + f" {ext[0]:%H:%M}"
             cells.append(c)
-        print(f\"{d} {d:%a}  {cells[0]:<32} {cells[1]}\")
-    print(f\"Всего за {days} дн. через Buffer: Facebook {tot['facebook']}, X {tot['x']}\")
+        print(f"{d} {d:%a}  {cells[0]:<32} {cells[1]}")
+    print(f"Всего за {days} дн. через Buffer: Facebook {tot['facebook']}, X {tot['x']}")
 
 
 def main(argv):
-    if \"--plan\" in argv:
-        i = argv.index(\"--plan\")
+    if "--plan" in argv:
+        i = argv.index("--plan")
         print_plan(int(argv[i + 1]) if len(argv) > i + 1 and argv[i + 1].isdigit() else 30)
         return 0
-    if \"--lint\" in argv:
+    if "--lint" in argv:
         return lint()
-    token = (os.environ.get(\"BUFFER_TOKEN\") or \"\").strip()
+    token = (os.environ.get("BUFFER_TOKEN") or "").strip()
     client = P.BufferClient(token) if token else None
     try:
-        if \"--check\" in argv:
+        if "--check" in argv:
             if not client:
-                print(\"::error::BUFFER_TOKEN не задан\")
+                print("::error::BUFFER_TOKEN не задан")
                 return 1
             return 0 if check_connection(client) else 1
-        if \"--dry-run\" in argv:
-            return run(\"dry-run\", client=client)
+        if "--dry-run" in argv:
+            return run("dry-run", client=client)
         if not client:
-            print(\"::error::BUFFER_TOKEN не задан\")
+            print("::error::BUFFER_TOKEN не задан")
             return 1
-        return run(\"run\", client=client)
+        return run("run", client=client)
     except P.BufferAuthError as e:
-        print(f\"::error::Buffer отклонил ключ: {e}. Проверьте секрет BUFFER_TOKEN.\")
+        print(f"::error::Buffer отклонил ключ: {e}. Проверьте секрет BUFFER_TOKEN.")
         return 1
     except P.BufferError as e:
-        print(f\"::error::Buffer: {e}\")
+        print(f"::error::Buffer: {e}")
         return 1
 
 
-if __name__ == \"__main__\":
+if __name__ == "__main__":
     sys.exit(main(sys.argv[1:]))
