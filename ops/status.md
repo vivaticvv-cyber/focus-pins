@@ -1,27 +1,22 @@
 # FOCUS ops status
 
-**Updated:** 2026-10-24 ~20:25 Kyiv (Grok)
+**Updated:** 2026-10-25 ~04:40 Kyiv (Grok)
 
-## STATUS: DONE (post-QA fixes applied)
+## STATUS: DONE
 
-### 24.10 вечер — Claude help-3 (после QA)
-Исправлено по замечаниям Claude:
-- **pin 102**: description расширено до 345 символов (lint 300–450)
-- **Правила** `ops/FOCUS-image-prompt-rules.md`: убраны остаточные отрицания («with no marks»), пример boots → «one boot»
-- Сброшены в `status=new`, jpg удалены, сцены упрощены:
-  - M032 (бессмыслица сверху) → убрана «quiet» зона, пустая стена
-  - M034 (рукописная бессмыслица) → закрытый конверт без надписей
-  - M027 (календарь с кашей) → календарь убран, осталась карточка со звездой
-  - pin 130 (календарь с искажёнными цифрами) → круглый объект + одна звезда + стрелка
+Ежедневная проверка 04:30. Запас информационных пинов 32 дня (>21). Квота выполнена, отказов нет. Корень чистый.
 
-Опциональный брак (M040, M029, M022, 132) не трогали — низкая серьёзность.
-
-### Numbers
-- pins.csv: 366
-- Social new (ждут картинок): 3 (M027, M032, M034) + ранее
+### Numbers (auto-status 2026-10-25 00:21 UTC)
+- pins.csv: 366 (новых информационных new+ready: 209, запас 32 дн.)
+- Промо new+ready: 58
+- Social ready: Facebook Buffer 20, X Buffer 18, Metricool 40
 - Next batch due: **2026-10-28**
 - MAX_PER_DAY = 10
 
+### Ночные запуски
+- Daily pins #52: success
+- Autopilot #43: failure (Buffer free plan: first comment requires paid). Не критично, пины в норме.
+- Ops report: success
+
 ### NEED
 - После регенерации M027/M032/M034 → Claude заменит в Metricool (декабрьские посты)
-- OCR-автопроверка (рекомендация Claude) — пока не реализована
