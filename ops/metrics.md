@@ -4,38 +4,50 @@
 
 | дата | Gumroad: просмотры страниц (soft-structure / seqen / premium-pack / dwshkr) | Gumroad: источники трафика | скачивания Mini | focus-mini.pages.dev: посетители (Cloudflare) | Pinterest: показы / клики по ссылкам / подписчики | Facebook: охват / клики | X: показы / клики | продажи (шт., $) |
 |------|--------------------------------------------------------------------------|----------------------------|-----------------|-----------------------------------------------|---------------------------------------------------|-------------------------|-------------------|------------------|
-| 25.10 | **нет в API** (только dashboard). sales_count: 0 / 0 / 0 / 1 | — | 1 (29.09, free; **тест владельца**) | **RUM ≈ Exclude bots:** ~50 visits / ~50 page views за ~30д (25.09–25.10). Last 7d: 7. 23.10=5, 24.10=1. Edge (с ботами): ~2740 visits / 8920 req | — | — | — | **paid 0** ($0). free trial 1 = self-test |
+| 25.10 | **Все товары (16.09–25.10): 142 views.** Per-product не снимали. sales_count: 0/0/0/1 | Direct/email/IM 117; vivatic.gumroad.com 17; FB 5; focus-mini 1; Google 1; Reddit 1 | 1 (29.09, free; **тест владельца**) | **RUM ≈ Exclude bots:** ~50 visits / ~50 page views за ~30д. Last 7d: 7. Edge (боты): ~2740 visits | — | — | — | **paid 0** ($0). free trial 1 = self-test |
 | 31.10 | | | | | | | | |
 
-## Снимок 25.10.2026 (утро + правка, Grok API)
+## Снимок 25.10.2026 (API + dashboard screenshots владельца)
 
 ### Cloudflare (trial focus-mini.pages.dev)
-- **KPI (живые):** RUM `rumPageloadEventsAdaptiveGroups` ≈ Web Analytics Exclude bots → **~50 visits / ~50 page views** за период 25.09–25.10.
+- **KPI (живые):** RUM ≈ Web Analytics Exclude bots → **~50 visits / ~50 page views** (25.09–25.10).
 - Last 7 days: **7** visits.
-- Edge HTTP (включая ботов, не KPI): ~8920 requests, ~2740 visits.
-- Источник: Cloudflare GraphQL Account Analytics (token Read analytics).
+- Edge (с ботами, не KPI): ~8920 requests, ~2740 visits.
 
-### Gumroad (API view_sales + edit_products + products)
-| Товар | Permalink | sales_count | paid |
-|-------|-----------|-------------|------|
-| Soft Structure Premium | soft-structure | 0 | 0 |
-| One Task ADHD Planner | seqen | 0 | 0 |
-| Premium Complete Pack | premium-pack | 0 | 0 |
-| FOCUS Mini 7-Day Free Trial | dwshkr | 1 | 0 (free, 2026-09-29) |
+### Gumroad Dashboard (16.09–25.10, All products)
+Источник: скриншоты Analytics → Продажи.
 
-- **Paid sales total: 0.** Revenue: $0.
-- **Единственная «продажа» Mini (29.09) — тест владельца** (проверка, как работает checkout). В воронке как органическую не считаем.
-- **Page views / referrers:** публичный Gumroad API **не отдаёт**. Проверено: `view_sales` + `edit_products` → products/sales дают только `sales_count` / `sales_usd_cents` и список продаж. Endpoints `/analytics`, `/stats`, `/views`, product subpaths — 404 или «not found». Официальная документация подтверждает: views есть только в Sales Analytics dashboard (UI). Для 25.10 views = N/A через API.
+| Метрика | Значение |
+|---------|----------|
+| Views (Мнения) | **142** |
+| Sales (Продажи) | 1 |
+| Revenue | **$0** |
+| Conversion | ~0,7% (1/142; единственная продажа = self-test) |
 
-### Соцсети / Pinterest / FB / X
-Не снимались в этой точке (не критично для 25.10; при 31.10 — по dashboard при желании).
+**Referrers (views / sales):**
+| Источник | Views | Sales |
+|----------|-------|-------|
+| Прямая связь / email / IM | 117 | 1 |
+| vivatic.gumroad.com | 17 | 0 |
+| Facebook | 5 | 0 |
+| focus-mini.pages.dev | 1 | 0 |
+| Google | 1 | 0 |
+| Reddit | 1 | 0 |
 
-## Краткий вывод по воронке (25.10)
-1. **Живой трафик на trial очень низкий** (~1–2 визита/день в среднем, всплеск 23.10). Edge-тысячи — боты.
-2. **Продаж paid = 0.** Единственный free trial 29.09 — self-test владельца, не реальный клиент.
-3. Воронка на этапе **обнаружения / трафика**, а не конверсии: данных по «пришли на товар → не купили» почти нет.
-4. GSC ещё не проиндексировал — ожидаемо, не блокирует текущую автоматизацию соцсетей.
-5. До **31.10** продолжаем автоматизацию (pins/social) без изменений оффера/цен. Если 31.10 всё ещё 0 paid — разбор: ссылки в постах, посадка trial→Gumroad, видимость в Pinterest.
+**Locations:** US 93 views / 0 sales; UA 6 views / 1 sale (тест).
+
+**По продуктам (API sales_count):** soft-structure 0, seqen 0, premium-pack 0, dwshkr 1 (self-test). Per-product views в dashboard не снимали — при желании можно добавить позже.
+
+### Соцсети
+Не снимались отдельно. Из referrers: FB дал 5 views на Gumroad; Pinterest в списке referrers не виден (возможно уходит в Direct).
+
+## Краткий вывод по воронке (25.10, обновлён)
+1. **На Gumroad есть views (142 за ~40 дней)** — люди доходят до страниц товаров. Это сильнее, чем только CF trial (~50).
+2. **Paid = 0.** Единственная «продажа» Mini — self-test владельца.
+3. **Главный поток views = Direct / email / IM (117).** Соцсети пока почти не конвертируют в Gumroad-views: FB 5, Reddit 1, Pinterest не виден в referrers.
+4. Trial → Gumroad почти не течёт (focus-mini.pages.dev = 1 referrer).
+5. US даёт больше всего views (93), но 0 продаж; конверсии реальных ещё нет.
+6. Узкое место: **слабый переход из соцсетей/пинов на страницы товаров + отсутствие реальных покупок.** До 31.10 — без паники, продолжаем автоматизацию. На 31.10 смотрим, выросли ли views из FB/Pinterest и появились ли paid.
 
 ## Правило решения на 01.11
 - нет трафика на страницы товаров → проблема в источниках трафика
