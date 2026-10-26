@@ -76,3 +76,6 @@
 
 ## 2026-10-24 01:45 UTC (social)
 - social_batch_2.csv: принято 0, отклонено 0
+
+## 2026-10-26 06:31 UTC (social)
+- social_batch_3.csv: принято 3, отклонено 0
