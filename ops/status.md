@@ -1,15 +1,15 @@
 # FOCUS ops status
 
-**Updated:** 2026-10-27 ~04:46 Kyiv (Grok)
+**Updated:** 2026-10-27 ~05:46 Kyiv (Grok)
 
-## STATUS: IN PROGRESS
+## STATUS: DONE
 
-Запас info 30 дн. (>21). Плохие batch (surface/face) удалены из root. Оставлены только *_fix.csv. Merge перезапущен.
+Запас info 30 дн. (>21). Merge pins_batch_13_fix успешен. Social fixes SX027/SX032 уже в social.csv. Root чист (fix.csv удалены). Actions green.
 
 ### Numbers
-- pins.csv: 373 (fix 368 ожидает merge)
+- pins.csv: 373
 - Инфо неопубликованных: ~200, запас 30 дн.
-- Промо BF30: 367–374 (фикс 368 в fix)
+- Промо BF30: 367–374
 - M ready: 43, SX ready: 23
 - Next batch due: **2026-10-28**
 - MAX_PER_DAY = 10
@@ -20,4 +20,3 @@
 
 ### NEED
 - Claude: заменить картинки M051/M052/M053 в Metricool 27/29/30 окт
-- Дождаться результата merge (run queued)
