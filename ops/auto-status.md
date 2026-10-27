@@ -1,17 +1,17 @@
-# Auto status (ops_report.py) — 2026-10-26 10:27 UTC
+# Auto status (ops_report.py) — 2026-10-27 00:46 UTC
 
 ## Pinterest (pins.csv)
 - Строк 373: new 204, published 99, ready 64, scheduled 6
-- Неопубликованных информационных (new+ready): 205; хватит до 2026-11-26; до 2027-01-14 докупить ≈ 368
-- Неопубликованных промо (new+ready): 63; хватит до 2026-11-28; до 2027-01-14 докупить ≈ 98
-- Запас информационных: 31 дн. → в норме
+- Неопубликованных информационных (new+ready): 205; хватит до 2026-11-26; до 2027-01-14 докупить ≈ 363
+- Неопубликованных промо (new+ready): 63; хватит до 2026-11-29; до 2027-01-14 докупить ≈ 97
+- Запас информационных: 30 дн. → в норме
 - lint pins.csv: замечаний нет
 - Строк new со сдвинутыми колонками (служебные поля заполнены): 0
 - Описаний с фразой-добивкой «small visible step»: 0
 
 ## Facebook/X (social.csv)
 - S (Facebook, Buffer): ready 20 (без картинки: 0), new 0, scheduled/published 3
-- SX (X, Buffer): ready 23 (без картинки: 0), new 1, scheduled/published 6
+- SX (X, Buffer): ready 23 (без картинки: 0), new 0, scheduled/published 7
 - M (Facebook, Metricool): ready 43 (без картинки: 0), new 0, scheduled/published 0
 
 ## Партии
@@ -21,7 +21,9 @@
 - Отклонённые строки: rejected_social_batch_5.csv → id SX032 (нужно исправить и отправить как *_fix.csv)
 
 ## Последние запуски Actions
-- 10-26T10:26 Ops report: in_progress
+- 10-27T00:46 Ops report: in_progress
+- 10-27T00:45 Autopilot: success
+- 10-26T10:26 Ops report: success
 - 10-26T09:16 Ops report: success
 - 10-26T09:15 Daily pins: success
 - 10-26T08:11 Ops report: success
@@ -29,5 +31,3 @@
 - 10-26T06:32 Ops report: success
 - 10-26T06:31 Autopilot: success
 - 10-26T00:21 Ops report: success
-- 10-26T00:18 Daily pins: success
-- 10-25T23:30 Ops report: success
