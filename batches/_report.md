@@ -112,3 +112,6 @@
 - social_batch_5.csv: принято 0, отклонено 1 → batches/rejected_social_batch_5.csv
   - id SX032: SX032: в сцене нежелательные слова: face
 - social_batch_5_fix.csv: принято 1, отклонено 0
+
+## 2026-10-27 02:46 UTC
+- pins_batch_13_fix.csv: принято 0, отклонено 0
