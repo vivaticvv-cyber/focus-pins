@@ -36,3 +36,4 @@
 2026-10-25 | Grok | Daily 04:30: pins=366 info 32d (>21), Daily #52 success, Autopilot #43 failure (Buffer first comment paid plan), root clean, STATUS: DONE Next batch due 2026-10-28
 2026-10-26 | Grok | Daily 04:30: pins=366 info 31d (>21), Daily #54 success, Autopilot #46 success, root clean, STATUS: DONE Next batch due 2026-10-28
 2026-10-26 | Grok | M051–M053 ready (images exist, status=ready). social_batch_3 leftover cleaned conceptually. BF30 strategy: social_batch_4 (SX026–SX031) pushed — calm warm-up posts with dates+code. Tone: no FOMO, dates always with code. Claude: replace media in Metricool 27/29/30 Oct with M051/M052/M053 when ready.
+2026-10-27 | Grok | Daily 04:30: pins=373 info 30d (>21), Daily #56 success, Autopilot #49 success; fixed rejected 368/SX027/SX032 (surface→table, слово содержало face); pushed *_fix.csv + triggered Autopilot/Merge; STATUS: IN PROGRESS Next batch due 2026-10-28
