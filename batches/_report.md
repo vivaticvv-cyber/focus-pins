@@ -89,3 +89,13 @@
   - id SX027: SX027: в сцене нежелательные слова: face
 - social_batch_5.csv: принято 2, отклонено 1 → batches/rejected_social_batch_5.csv
   - id SX032: SX032: в сцене нежелательные слова: face
+
+## 2026-10-27 00:45 UTC
+- pins_batch_13.csv: принято 0, отклонено 1 → batches/rejected_pins_batch_13.csv
+  - id 368: пин 368: в сцене нежелательные слова: face (используйте {mascot} или предмет-метафору)
+
+## 2026-10-27 00:45 UTC (social)
+- social_batch_4.csv: принято 0, отклонено 1 → batches/rejected_social_batch_4.csv
+  - id SX027: SX027: в сцене нежелательные слова: face
+- social_batch_5.csv: принято 0, отклонено 1 → batches/rejected_social_batch_5.csv
+  - id SX032: SX032: в сцене нежелательные слова: face
