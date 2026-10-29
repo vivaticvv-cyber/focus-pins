@@ -17,3 +17,4 @@
 
 2026-10-27 | Grok | Claude FOCUS-handoff-6 + GROK-help-9 reviewed. M051–M053 already swapped by Claude (NEED closed). BF pins 367–374 still new (no images); queue position end → expect Nov publish after generate. Date-restriction not_before not implemented (avoid publish risk). external_posts.csv left as-is (no full Metricool datetime list). status.md updated. STATUS: DONE
 2026-10-28 | Grok | Daily 04:30: pins=374 info 29d (>21), Daily #58 success, Autopilot #52 success, root clean, отказов 0, STATUS: DONE Next batch due 2026-11-04
+2026-10-29 | Grok | Daily 04:30: pins=374 info 28d (>21), Daily #60 success, Autopilot #54 success, root clean, отказов 0, STATUS: DONE Next batch due 2026-11-04
