@@ -1,16 +1,16 @@
 # FOCUS ops status
 
-**Updated:** 2026-10-29 ~04:40 Kyiv (Grok)
+**Updated:** 2026-10-30 ~04:40 Kyiv (Grok)
 
 ## STATUS: DONE
 
-Запас info 28 дн. (>21). Root чист. Actions green (Daily #60, Autopilot #54, Ops report success). Отказов 0.
+Запас info 27 дн. (>21). Root чист. Actions green (Daily #62, Autopilot #56, Ops report success). Отказов 0.
 
 ### Numbers
-- pins.csv: 374 (new 185, ready 65, scheduled 6, published 118)
-- Инфо неопубликованных (new+ready): 190, запас 28 дн. (до 2026-11-26)
-- Промо неопубл.: 60 (до 2026-11-29)
-- M ready: 43, SX ready: 24, S ready: 19
+- pins.csv: 374 (new 178, ready 66, scheduled 6, published 124)
+- Инфо неопубликованных (new+ready): 185, запас 27 дн. (до 2026-11-26)
+- Промо неопубл.: 59 (до 2026-11-29)
+- M ready: 43, SX ready: 23, S ready: 19
 - Next batch due: **2026-11-04**
 - MAX_PER_DAY = 10
 
