@@ -49,6 +49,11 @@ CONFIG = dict(
     LEAD_MIN=20,
     RECENT_HOURS_N=3,        # час (ET) не повторяет часы трёх последних постов этой сети
     LINK_GAP_X=6,            # ссылка в тексте X не чаще чем раз в 7 постов
+    LINK_GAP_X_SALE=2,       # в окне акции (26.11 10:00 — 1.12 10:00 Киев) ссылка в X примерно в каждом 3-м посте (решение владельца 3 нояб.)
+    BF_PRE=("2026-11-16T00:00", "2026-11-26T10:00"),   # прогрев: посты акции (kind bf_pre / bf_any) не чаще чем через BF_PRE_GAP обычных
+    BF_WIN=("2026-11-26T10:00", "2026-12-01T10:00"),   # окно акции: посты акции идут первыми (kind bf_win / bf_any / bf_last)
+    BF_LAST_DAY="2026-11-30",                          # в этот день первым идёт kind bf_last
+    BF_PRE_GAP=1,                                      # в прогрев пост акции через каждый второй пост сети
     SHOWCASE_GAP=3,          # витринные посты не чаще 1 из 4 в каждой сети
     X_LIMIT=280, X_LINK_LEN=23,
     FB_TEXT_MIN=180, FB_TEXT_MAX=700,
@@ -178,20 +183,80 @@ def since_x_link(rows):
     return n
 
 
-def choose(rows, net):
-    """Обычные посты идут по возрастанию id; витринные (showcase) вставляются не чаще 1 из SHOWCASE_GAP+1."""
+# --- Black Friday: посты акции выходят только в своё время (иначе «окно открыто» может выйти в декабре) ---
+BF_LEGACY = {"SX026": "bf_pre", "SX027": "bf_any", "SX028": "bf_win", "SX029": "bf_win", "SX030": "bf_win",
+             "SX031": "bf_any", "SX032": "bf_any", "SX033": "bf_any", "SX034": "bf_win"}
+
+
+def bf_kind(r):
+    """bf_pre / bf_win / bf_any / bf_last для постов акции, иначе ''. Старые строки — по таблице BF_LEGACY,
+    любая другая строка с кодом BF30 в тексте считается bf_any."""
+    k = (r.get("kind") or "").strip()
+    if k in ("bf_pre", "bf_win", "bf_any", "bf_last"):
+        return k
+    if r["id"] in BF_LEGACY:
+        return BF_LEGACY[r["id"]]
+    if "BF30" in (r.get("text") or "") or "BF30" in (r.get("first_comment") or ""):
+        return "bf_any"
+    return ""
+
+
+def _dt(s):
+    return datetime.fromisoformat(s).replace(tzinfo=P.kyiv())
+
+
+def bf_phase(when):
+    """'pre' (16.11—26.11 10:00), 'win' (окно акции) или '' (вне акции)."""
+    if when is None:
+        return ""
+    if _dt(cfg("BF_WIN")[0]) <= when < _dt(cfg("BF_WIN")[1]):
+        return "win"
+    if _dt(cfg("BF_PRE")[0]) <= when < _dt(cfg("BF_PRE")[1]):
+        return "pre"
+    return ""
+
+
+def since_bf(rows, net):
+    n = 0
+    for r in reversed(_hist(rows, net)):
+        if bf_kind(r):
+            return n
+        n += 1
+    return n
+
+
+def choose(rows, net, when=None):
+    """Обычные посты идут по возрастанию id; витринные (showcase) вставляются не чаще 1 из SHOWCASE_GAP+1.
+    Посты акции (BF30): вне 16.11—1.12 не выходят; в прогрев — не чаще чем через BF_PRE_GAP обычных;
+    в окне акции — первыми (в последний день — bf_last)."""
+    phase = bf_phase(when)
+    last_day = when is not None and when.date().isoformat() == cfg("BF_LAST_DAY") and phase == "win"
+    ok_kinds = {"pre": ("bf_pre", "bf_any"), "win": ("bf_win", "bf_any", "bf_last")}.get(phase, ())
     cands = sorted((r for r in rows if r["network"] == net and status(r) == "ready"
                     and not r["id"].startswith("M")), key=lambda r: r["id"])      # M-строки — для Metricool
+    cands = [r for r in cands if not bf_kind(r) or bf_kind(r) in ok_kinds]
+    if not last_day:
+        cands = [r for r in cands if bf_kind(r) != "bf_last"]
     xl = since_x_link(rows) if net == "x" else 0
+    gap = cfg("LINK_GAP_X_SALE") if phase == "win" else cfg("LINK_GAP_X")
 
     def link_ok(r):
-        return not (net == "x" and (r.get("link_key") or "").strip() and xl < cfg("LINK_GAP_X"))
+        return not (net == "x" and (r.get("link_key") or "").strip() and xl < gap)
 
+    bf = [r for r in cands if bf_kind(r) and link_ok(r)]
+    if last_day:
+        lastp = [r for r in bf if bf_kind(r) == "bf_last"]
+        if lastp:
+            return lastp[0]
+    if bf and (phase == "win" or (phase == "pre" and since_bf(rows, net) >= cfg("BF_PRE_GAP"))):
+        # в окне сначала посты со ссылкой, если ссылка сейчас допустима и в последних постах её не было
+        linked = [r for r in bf if (r.get("link_key") or "").strip()] if (net == "x" and phase == "win") else []
+        return (linked or bf)[0]
     show = [r for r in cands if r.get("kind") == "showcase" and link_ok(r)]
     if show and since_kind(rows, net, "showcase") >= cfg("SHOWCASE_GAP"):
         return show[0]
     for r in cands:
-        if r.get("kind") != "showcase" and link_ok(r):
+        if r.get("kind") != "showcase" and not bf_kind(r) and link_ok(r):
             return r
     return show[0] if show else None
 
@@ -365,7 +430,7 @@ def run(mode="run", now=None, client=None, csv_path=CSV, root=".", rng=None, url
         if not when:
             print(f"::warning::[{net}] в оставшуюся часть окна публикации поста не поместить")
             continue
-        r = choose(rows, net)
+        r = choose(rows, net, when)
         if not r:
             print(f"::error::[{net}] нет готовых строк (status=ready) с подходящим видом/ссылкой — "
                   f"пополните social.csv и запустите «Social images»")

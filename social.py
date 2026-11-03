@@ -47,6 +47,8 @@ LINKS = {
     "planner": ("https://vivatic.gumroad.com/l/seqen", True),
     "soft": ("https://vivatic.gumroad.com/l/soft-structure", True),
     "bundle": ("https://vivatic.gumroad.com/l/premium-pack", True),
+    "printable": ("https://vivatic.gumroad.com/l/soft-structure-printable", True),   # $5-планер (с 3 нояб.)
+    "starter": ("https://vivatic.gumroad.com/l/focus-starter", False),               # бесплатный Starter
 }
 SALE = dict(code="BF30", start="2026-11-26T10:00", end="2026-12-01T10:00")     # время Киева; код на платные товары
 UTM_SOURCE = {"facebook": "facebook", "x": "x"}
