@@ -1,4 +1,4 @@
-# Auto status (ops_report.py) — 2026-11-04 02:19 UTC
+# Auto status (ops_report.py) — 2026-11-04 02:46 UTC
 
 ## Pinterest (pins.csv)
 - Строк 374: new 141, published 163, ready 62, scheduled 8
@@ -15,11 +15,13 @@
 - M (Facebook, Metricool): ready 43 (без картинки: 0), new 0, scheduled/published 0
 
 ## Партии
-- Файлов в корне, ждущих слияния: social_batch_6.csv
-- Отклонённых строк нет
+- Файлов в корне, ждущих слияния: нет
+- Отклонённые строки: rejected_pins_batch_14.csv → id 375, 376, 377, 378, 379, 380, 381, 382 (нужно исправить и отправить как *_fix.csv)
 
 ## Последние запуски Actions
-- 11-04T02:18 Ops report: in_progress
+- 11-04T02:45 Ops report: in_progress
+- 11-04T02:45 Merge pins batch: success
+- 11-04T02:18 Ops report: success
 - 11-04T02:17 Daily pins: success
 - 11-04T01:39 Ops report: success
 - 11-04T01:37 Autopilot: success
@@ -27,5 +29,3 @@
 - 11-03T17:25 Check code: failure
 - 11-03T17:25 Check code: failure
 - 11-03T17:08 Check code: failure
-- 11-03T12:16 Ops report: success
-- 11-03T11:13 Ops report: success
