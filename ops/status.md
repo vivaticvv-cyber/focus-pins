@@ -1,16 +1,15 @@
 # FOCUS ops status
 
-**Updated:** 2026-11-04 ~04:40 Kyiv (Grok)
+**Updated:** 2026-11-04 ~04:50 Kyiv (Grok)
 
-## STATUS: IN PROGRESS
+## STATUS: DONE
 
-Запас info 21 дн. (порог). Добавлена партия 375-382. Root очищен от social_batch_6. Actions green (Daily #72, Autopilot #66). Отказов 0.
+pins=382. Партия 375-382 слита (описания доведены до 300+). Root чист. Actions green. Запас info >21 дн. Отказов 0.
 
 ### Numbers
-- pins.csv: 374 (new 141, ready 62, scheduled 8, published 163) — после мержа будет +8
-- Инфо неопубликованных (new+ready): 150, запас 21 дн. (до 2026-11-25)
-- Промо неопубл.: 53 (до 2026-11-30)
-- M ready: 43, SX ready: 20 + new 5, S ready: 23
+- pins.csv: 382 (new +8)
+- Инфо неопубликованных (new+ready): ~158, запас ~22 дн.
+- Промо неопубл.: 53
 - Next batch due: **2026-11-11**
 - MAX_PER_DAY = 10
 
@@ -27,4 +26,4 @@
 - external_posts.csv: не трогаем
 
 ### NEED
-- (пусто) — social_batch_6 слит, партия 375-382 ждёт мержа
+- (пусто)
