@@ -1,17 +1,17 @@
 # FOCUS ops status
 
-**Updated:** 2026-11-03 ~04:40 Kyiv (Grok)
+**Updated:** 2026-11-04 ~04:40 Kyiv (Grok)
 
-## STATUS: DONE
+## STATUS: IN PROGRESS
 
-Запас info 23 дн. (>21). Root чист. Actions green (Daily #69, Autopilot #63, Ops report success). Отказов 0.
+Запас info 21 дн. (порог). Добавлена партия 375-382. Root очищен от social_batch_6. Actions green (Daily #72, Autopilot #66). Отказов 0.
 
 ### Numbers
-- pins.csv: 374 (new 157, ready 62, scheduled 7, published 148)
-- Инфо неопубликованных (new+ready): 164, запас 23 дн. (до 2026-11-25)
-- Промо неопубл.: 55 (до 2026-11-30)
-- M ready: 43, SX ready: 21, S ready: 18
-- Next batch due: **2026-11-04**
+- pins.csv: 374 (new 141, ready 62, scheduled 8, published 163) — после мержа будет +8
+- Инфо неопубликованных (new+ready): 150, запас 21 дн. (до 2026-11-25)
+- Промо неопубл.: 53 (до 2026-11-30)
+- M ready: 43, SX ready: 20 + new 5, S ready: 23
+- Next batch due: **2026-11-11**
 - MAX_PER_DAY = 10
 
 ### BF30
@@ -27,4 +27,4 @@
 - external_posts.csv: не трогаем
 
 ### NEED
-- (пусто) — следующее: batch ~04.11, social_batch_6 (январь M041–M050) не раньше ноября
+- (пусто) — social_batch_6 слит, партия 375-382 ждёт мержа
