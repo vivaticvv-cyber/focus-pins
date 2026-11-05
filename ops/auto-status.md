@@ -1,4 +1,4 @@
-# Auto status (ops_report.py) — 2026-11-05 07:56 UTC
+# Auto status (ops_report.py) — 2026-11-05 08:03 UTC
 
 ## Pinterest (pins.csv)
 - Строк 407: new 163, published 171, ready 73
@@ -10,8 +10,8 @@
 - Описаний с фразой-добивкой «small visible step»: 0
 
 ## Facebook/X (social.csv)
-- S (Facebook, Buffer): ready 23 (без картинки: 0), new 0, scheduled/published 6
-- SX (X, Buffer): ready 25 (без картинки: 0), new 0, scheduled/published 12
+- S (Facebook, Buffer): ready 28 (без картинки: 0), new 0, scheduled/published 6
+- SX (X, Buffer): ready 26 (без картинки: 0), new 3, scheduled/published 12
 - M (Facebook, Metricool): ready 43 (без картинки: 0), new 0, scheduled/published 0
 
 ## Партии
@@ -19,7 +19,9 @@
 - Отклонённых строк нет
 
 ## Последние запуски Actions
-- 11-05T07:56 Ops report: in_progress
+- 11-05T08:03 Ops report: in_progress
+- 11-05T08:01 Autopilot: success
+- 11-05T07:56 Ops report: success
 - 11-05T07:56 Merge pins batch: success
 - 11-05T07:54 Check code: success
 - 11-05T02:24 Ops report: success
@@ -27,5 +29,3 @@
 - 11-05T01:44 Ops report: success
 - 11-05T01:44 Autopilot: success
 - 11-04T12:27 Ops report: success
-- 11-04T11:24 Ops report: success
-- 11-04T11:24 Daily pins: success
