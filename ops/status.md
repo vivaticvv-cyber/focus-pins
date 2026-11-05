@@ -1,13 +1,13 @@
 # FOCUS ops status
 
-**Updated:** 2026-11-04 ~04:50 Kyiv (Grok)
+**Updated:** 2026-11-05 ~04:40 Kyiv (Grok)
 
 ## STATUS: DONE
 
-pins=382. Партия 375-382 слита (описания доведены до 300+). Root чист. Actions green. Запас info >21 дн. Отказов 0.
+pins=382. Root чист. Отказов 0. Запас info 22 дн. (>21). Daily pins #74 failure (Буфер доступ к каналам), Autopilot зелёный.
 
 ### Numbers
-- pins.csv: 382 (new +8)
+- pins.csv: 382
 - Инфо неопубликованных (new+ready): ~158, запас ~22 дн.
 - Промо неопубл.: 53
 - Next batch due: **2026-11-11**
@@ -26,4 +26,4 @@ pins=382. Партия 375-382 слита (описания доведены д�
 - external_posts.csv: не трогаем
 
 ### NEED
-- (пусто)
+- NEED OWNER: проверить доступ Buffer (токен или каналы) — Daily pins упал на публикации (FORBIDDEN channels).
