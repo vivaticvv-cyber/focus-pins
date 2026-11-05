@@ -1,4 +1,4 @@
-# Auto status (ops_report.py) — 2026-11-05 19:20 UTC
+# Auto status (ops_report.py) — 2026-11-05 19:21 UTC
 
 ## Pinterest (pins.csv)
 - Строк 407: new 161, published 171, ready 75
@@ -15,11 +15,13 @@
 - M (Facebook, Metricool): ready 43 (без картинки: 0), new 0, scheduled/published 0
 
 ## Партии
-- Файлов в корне, ждущих слияния: pins_batch_14.csv, social_batch_softseed.csv
+- Файлов в корне, ждущих слияния: social_batch_softseed.csv
 - Отклонённых строк нет
 
 ## Последние запуски Actions
-- 11-05T19:20 Ops report: in_progress
+- 11-05T19:21 Ops report: in_progress
+- 11-05T19:20 Merge pins batch: success
+- 11-05T19:20 Ops report: success
 - 11-05T19:19 Autopilot: success
 - 11-05T19:19 Ops report: success
 - 11-05T19:18 Autopilot: success
@@ -27,5 +29,3 @@
 - 11-05T19:15 Autopilot: success
 - 11-05T19:15 Check code: success
 - 11-05T18:56 Ops report: failure
-- 11-05T18:56 Daily pins: failure
-- 11-05T18:55 Ops report: failure
