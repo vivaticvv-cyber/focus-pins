@@ -1,14 +1,14 @@
 # FOCUS ops status
 
-**Updated:** 2026-11-05 ~04:40 Kyiv (Grok)
+**Updated:** 2026-11-06 ~04:40 Kyiv (Grok)
 
 ## STATUS: DONE
 
-pins=382. Root чист. Отказов 0. Запас info 22 дн. (>21). Daily pins #74 failure (Буфер доступ к каналам), Autopilot зелёный.
+pins=407. Root чист (убрал leftover social_batch_softseed). Отказов 0. Запас info 24 дн. (>21). Daily pins и Autopilot зелёные.
 
 ### Numbers
-- pins.csv: 382
-- Инфо неопубликованных (new+ready): ~158, запас ~22 дн.
+- pins.csv: 407
+- Инфо неопубликованных (new+ready): 171, запас 24 дн.
 - Промо неопубл.: 53
 - Next batch due: **2026-11-11**
 - MAX_PER_DAY = 10
@@ -26,4 +26,4 @@ pins=382. Root чист. Отказов 0. Запас info 22 дн. (>21). Daily
 - external_posts.csv: не трогаем
 
 ### NEED
-- NEED OWNER: проверить доступ Buffer (токен или каналы) — Daily pins упал на публикации (FORBIDDEN channels).
+- Нет.
