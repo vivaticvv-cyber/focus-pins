@@ -153,3 +153,6 @@
 
 ## 2026-11-05 19:21 UTC
 - pins_batch_14.csv: принято 0, отклонено 0
+
+## 2026-11-06 01:46 UTC (social)
+- social_batch_softseed.csv: принято 0, отклонено 0
