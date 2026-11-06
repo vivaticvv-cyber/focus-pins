@@ -301,6 +301,20 @@ def clip_title(t, limit):
     return t[:limit].rsplit(" ", 1)[0].rstrip(" ,;:-—")
 
 
+def make_alt_text(title, description, limit=480):
+    """Alt text for Pinterest (Buffer limit 500). title + first sentence of description."""
+    title = (title or "").strip()
+    desc = (description or "").strip()
+    first = desc.split(".")[0].strip() if desc else ""
+    if first and not first.endswith("."):
+        first += "."
+    parts = [x for x in (title, first) if x]
+    alt = " ".join(parts)
+    if len(alt) <= limit:
+        return alt
+    return alt[:limit].rsplit(" ", 1)[0].rstrip(" ,;:-—")
+
+
 def validate_row(r, images_dir="images"):
     """Ошибки, из-за которых пин отправлять нельзя."""
     errs = []
@@ -386,14 +400,17 @@ mutation CreatePost($input: CreatePostInput!) {
 """
 
 
-def create_pin(client, *, text, title, link, board_id, image_url, due_utc):
+def create_pin(client, *, text, title, link, board_id, image_url, due_utc, alt_text=None):
+    image = {"url": image_url}
+    if alt_text:
+        image["metadata"] = {"altText": alt_text[:500]}
     inp = {
         "channelId": cfg("CHANNEL_ID"),
         "text": text,
         "schedulingType": "automatic",
         "mode": "customScheduled",
         "dueAt": due_utc,
-        "assets": [{"image": {"url": image_url}}],
+        "assets": [{"image": image}],
         "metadata": {"pinterest": {"title": title, "url": link, "boardServiceId": board_id}},
     }
     data = client.graphql(CREATE_POST, {"input": inp}, mutation=True)
@@ -571,8 +588,10 @@ def run(mode="run", now=None, client=None, csv_path="pins.csv", images_dir="imag
             red = True
             continue
         try:
+            alt = make_alt_text(title, r.get("description"))
             post_id, due = create_pin(client, text=r["description"].strip(), title=title, link=link,
-                                      board_id=board_id, image_url=url, due_utc=to_utc_z(when))
+                                      board_id=board_id, image_url=url, due_utc=to_utc_z(when),
+                                      alt_text=alt)
         except BufferError as e:
             print(f"::error::Buffer: {e}. Останавливаюсь; уже запланированное сохранено.")
             save_rows(rows, header, csv_path)
