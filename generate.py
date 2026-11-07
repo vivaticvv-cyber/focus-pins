@@ -508,7 +508,7 @@ def main():
     print(f"Склад (информационные пины): готово {ready}, нужно {target} "
           f"(на {P.cfg('STOCK_DAYS')} дн. вперёд + остаток сегодня); сделать сейчас: {want}")
     state, done = {"cf_ok": True, "hf_used": 0}, 0
-    for r in sorted(rows, key=lambda x: int(x["id"])):
+    for r in P.generation_order(rows, now.date()):
         if done >= want:
             break
         if P.status(r) != "new":

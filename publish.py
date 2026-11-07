@@ -12,6 +12,7 @@
 metadata.pinterest{title,url,boardServiceId}).
 """
 import csv
+import math
 import re
 import json
 import os
@@ -48,6 +49,26 @@ CONFIG = dict(
     BOARD_INFO="703617210473228341",
     BOARD_PROMO="703617210473228343",
     QUEUE_LIMIT=10,                                 # Buffer Free: до 10 запланированных постов на канал
+
+    # --- распределение по тематическим доскам (с 8.11.2026) ---
+    # Новые доски должны набрать по ~20 пинов. Из пинов дня NEW_BOARD_SHARE стараемся отдать новым доскам
+    # (внутри них выбирается доска с наименьшим числом уже опубликованных пинов); остальные — старым доскам.
+    # Если пинов нужного типа нет, берётся любой подходящий. NEW_BOARDS=() возвращает прежний порядок «по id».
+    NEW_BOARDS=(
+        "ADHD Digital Planner & GoodNotes", "ADHD Holidays, Gifts & Budget", "ADHD Home & Low-Energy Chores",
+        "ADHD Morning & Evening Routines", "ADHD New Year Reset (gentle)", "ADHD Overwhelm & Reset Tools",
+        "ADHD Work & Study Focus", "Free ADHD Printables (Undated)",
+    ),
+    NEW_BOARD_SHARE=0.5,
+    # Пины с кодом BF30 (в ссылке или описании) публикуются только в эти даты (Киев, включительно)
+    # и внутри окна идут дозированно. 1 декабря исключено: акция заканчивается утром.
+    # Фазы: soft 8–15.11 (до 2 пинов) → warm 16–25.11 (до 5 всего) → active 26–30.11 (остальные, ~1/день).
+    BF_WINDOW=("2026-11-08", "2026-11-30"),
+    BF_GENERATE_DAYS_BEFORE=3,                      # generate.py рисует BF-пины заранее (с ~5.11)
+    BF_SOFT_END="2026-11-15",                       # конец мягкого прогрева
+    BF_SOFT_MAX=2,                                  # максимум BF-пинов к концу soft-фазы
+    BF_WARMUP=5, BF_WARMUP_END="2026-11-25",        # к концу 25.11 — всего 5 BF-пинов; дальше каждый день
+    NEW_PROMO_SHARE=0.6,                            # из «промо-слотов» (1 из 4) 60% отдаём новым промо-доскам
 
     # --- сколько пинов в день ---
     START_DATE="2026-10-01",                        # день 1; до этой даты ничего не публикуется
@@ -205,7 +226,31 @@ def load_rows(path="pins.csv"):
         rd = csv.DictReader(f)
         rows = [dict(r) for r in rd]
         header = list(rd.fieldnames or [])
+    if Path(path).name == "pins.csv":
+        apply_board_map(rows, Path(path).with_name("board_map.csv"))
     return rows, header
+
+
+def apply_board_map(rows, map_path):
+    """board_map.csv (колонки id,board): переносит ещё не запланированные пины (new/ready) на нужную доску.
+    Запланированные и опубликованные не трогаются. После первого сохранения pins.csv файл можно удалить."""
+    if not Path(map_path).exists():
+        return 0
+    with open(map_path, encoding="utf-8-sig", newline="") as f:
+        mp = {(r.get("id") or "").strip(): (r.get("board") or "").strip() for r in csv.DictReader(f)}
+    known, moved = CONFIG["BOARDS"], 0
+    for r in rows:
+        b = mp.get((r.get("id") or "").strip())
+        if not b or status(r) not in ("new", "ready") or (r.get("board") or "").strip() == b:
+            continue
+        if b not in known:
+            print(f"::warning::board_map: доска «{b}» не в BOARDS — пин {r.get('id')} не перенесён")
+            continue
+        r["board"] = b
+        moved += 1
+    if moved:
+        print(f"board_map.csv: перенесено на тематические доски {moved} пинов")
+    return moved
 
 
 def save_rows(rows, header, path="pins.csv"):
@@ -261,25 +306,150 @@ def choose_link(row):
     return random.Random(f"focus-link-{row.get('id')}").choices(urls, ws)[0]
 
 
-def choose_pins(cands, since_promo, k):
-    """k пинов из готовых (по возрастанию id); промо — не чаще одного на PROMO_MIN_GAP обычных, не подряд."""
+def board_of(r):
+    return (r.get("board") or "").strip()
+
+
+def is_new_board(r):
+    return board_of(r) in set(cfg("NEW_BOARDS"))
+
+
+def is_bf(r):
+    """Пин акции Black Friday (код BF30 в ссылке или описании)."""
+    return "bf30" in ((r.get("link") or "") + " " + (r.get("description") or "")).lower()
+
+
+def bf_window():
+    a, b = cfg("BF_WINDOW")
+    return date.fromisoformat(a), date.fromisoformat(b)
+
+
+def bf_allowed(r, day):
+    """Пины BF30 разрешены только в окне акции; для остальных пинов всегда True."""
+    if day is None or not is_bf(r):
+        return True
+    a, b = bf_window()
+    return a <= day <= b
+
+
+def board_counts(rows):
+    """Сколько пинов каждой доски уже запланировано или опубликовано."""
+    c = {}
+    for r in rows:
+        if status(r) in ("scheduled", "published"):
+            c[board_of(r)] = c.get(board_of(r), 0) + 1
+    return c
+
+
+def bf_cum(day, total):
+    """Сколько пинов BF30 всего должно быть опубликовано к концу дня day.
+    Три фазы: soft (до BF_SOFT_END) → warm (до BF_WARMUP_END) → active (до конца окна).
+    Не выкладывает пачкой в первый день."""
+    a, b = bf_window()
+    soft_end = date.fromisoformat(cfg("BF_SOFT_END"))
+    warm_end = date.fromisoformat(cfg("BF_WARMUP_END"))
+    soft_max = min(int(cfg("BF_SOFT_MAX")), total)
+    warm_max = min(int(cfg("BF_WARMUP")), total)
+    if day < a:
+        return 0
+    if day <= soft_end:
+        # мягкий прогрев: равномерно до soft_max
+        days = max((soft_end - a).days + 1, 1)
+        return min(soft_max, math.ceil(((day - a).days + 1) * soft_max / days))
+    if day <= warm_end:
+        # усиление: от soft_max до warm_max
+        days = max((warm_end - soft_end).days, 1)
+        extra = warm_max - soft_max
+        return min(warm_max, soft_max + math.ceil((day - soft_end).days * extra / days))
+    # активная фаза 26–30.11: оставшиеся почти каждый день
+    days = max((b - warm_end).days, 1)
+    rest = total - warm_max
+    return min(total, warm_max + math.ceil((day - warm_end).days * rest / days))
+
+
+def choose_pins(cands, since_promo, k, counts=None, day=None, bf_done=0, bf_total=0):
+    """k пинов из готовых.
+    — промо не чаще одного на PROMO_MIN_GAP обычных, не подряд;
+    — из пинов дня NEW_BOARD_SHARE отдаётся новым тематическим доскам (по очереди: доска с наименьшим
+      числом уже запланированных пинов), остальное — старым доскам (по возрастанию id); из промо-слотов
+      NEW_PROMO_SHARE достаётся новым промо-доскам;
+    — пины BF30 публикуются только в окне BF_WINDOW и по графику bf_cum
+      (soft → warm → active, без пачки в первый день)."""
     pool, picks = list(cands), []
-    while len(picks) < k:
-        pick = None
+    counts = dict(counts or {})
+    share = float(cfg("NEW_BOARD_SHARE"))
+    pshare = float(cfg("NEW_PROMO_SHARE"))
+    gap = cfg("PROMO_MIN_GAP")
+    n_new = bf_today = 0
+
+    def best_of(rows_, want_new):
+        best = None
+        for r in rows_:
+            key = (counts.get(board_of(r), 0) if want_new else 0, int(r["id"]))
+            if best is None or key < best[0]:
+                best = (key, r)
+        return best[1] if best else None
+
+    def eligible(want_new, promo_only=False):
+        out = []
         for r in pool:
-            if board_kind(r.get("board")) == "promo":
-                if since_promo >= cfg("PROMO_MIN_GAP"):
-                    pick = r
-                    break
-            else:
-                pick = r
-                break
+            # BF-пины не берём из обычного пула (их выбирает отдельный блок по bf_cum)
+            if is_new_board(r) != want_new or (is_bf(r) and day is not None) or not bf_allowed(r, day):
+                continue
+            promo = board_kind(r.get("board")) == "promo"
+            if promo and since_promo < gap or promo_only and not promo:
+                continue
+            out.append(r)
+        return out
+
+    while len(picks) < k:
+        promo_open = since_promo >= gap
+        pick = None
+        if promo_open and day is not None and bf_done + bf_today < bf_cum(day, bf_total):
+            bf = [r for r in pool if is_bf(r) and bf_allowed(r, day)]
+            pick = best_of(bf, False)
+            if pick is not None:
+                bf_today += 1
+        if pick is None and promo_open and ((day or date.min).toordinal() + len(picks)) % 10 < int(round(pshare * 10)):
+            pick = best_of(eligible(True, promo_only=True), True)      # промо-слот — новой промо-доске
+        if pick is None:
+            want_new = n_new < math.ceil((len(picks) + 1) * share)
+            pick = best_of(eligible(want_new), want_new) or best_of(eligible(not want_new), not want_new)
         if pick is None:
             break
         pool.remove(pick)
         picks.append(pick)
+        counts[board_of(pick)] = counts.get(board_of(pick), 0) + 1
+        n_new += 1 if is_new_board(pick) else 0
         since_promo = 0 if board_kind(pick.get("board")) == "promo" else since_promo + 1
     return picks
+
+
+def generation_order(rows, today=None):
+    """Порядок, в котором generate.py рисует картинки для строк new: сначала пины новых досок
+    (доска с наименьшим числом готовых/запланированных пинов — первой), затем остальные по id.
+    За BF_GENERATE_DAYS_BEFORE дней до окна акции пины BF30 идут первыми."""
+    cand = sorted((r for r in rows if status(r) == "new"
+                   and not (r.get("scene_prompt") or "").strip().lower().startswith("product pin")),
+                  key=lambda r: int(r["id"]))
+    counts = {}
+    for r in rows:
+        if status(r) in ("ready", "scheduled", "published"):
+            counts[board_of(r)] = counts.get(board_of(r), 0) + 1
+    order = []
+    if today is not None:
+        a, b = bf_window()
+        if a - timedelta(days=cfg("BF_GENERATE_DAYS_BEFORE")) <= today <= b:
+            order += [r for r in cand if is_bf(r)]
+    rest = [r for r in cand if r not in order]
+    newb = [r for r in rest if is_new_board(r)]
+    while newb:
+        best = min(newb, key=lambda r: (counts.get(board_of(r), 0), int(r["id"])))
+        newb.remove(best)
+        counts[board_of(best)] = counts.get(board_of(best), 0) + 1
+        order.append(best)
+    order += [r for r in rest if not is_new_board(r)]
+    return order
 
 
 def since_last_promo(rows):
@@ -554,7 +724,9 @@ def run(mode="run", now=None, client=None, csv_path="pins.csv", images_dir="imag
         red = True
 
     cands = sorted((r for r in rows if status(r) == "ready"), key=lambda r: int(r["id"]))
-    picks = choose_pins(cands, since_last_promo(rows), len(times))
+    bf_total = sum(1 for r in rows if is_bf(r))
+    bf_done = sum(1 for r in rows if is_bf(r) and status(r) in ("scheduled", "published"))
+    picks = choose_pins(cands, since_last_promo(rows), len(times), board_counts(rows), today, bf_done, bf_total)
     if len(picks) < len(times):
         print(f"::warning::Готовых пинов не хватает: нужно {len(times)}, подходящих {len(picks)} "
               f"(промо не ставится раньше чем через {cfg('PROMO_MIN_GAP')} обычных)")
@@ -579,7 +751,7 @@ def run(mode="run", now=None, client=None, csv_path="pins.csv", images_dir="imag
         link = add_utm(choose_link(r), r)
         title = clip_title(r.get("pin_title") or r.get("title"), cfg("TITLE_MAX"))
         url = image_url(r["id"])
-        line = f"пин {r['id']:>3} [{kind}] {when:%H:%M} -> {link}"
+        line = f"пин {r['id']:>3} [{kind}] «{board_name}» {when:%H:%M} -> {link}"
         if dry:
             print("DRY  " + line)
             continue
