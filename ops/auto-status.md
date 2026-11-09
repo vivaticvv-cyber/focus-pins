@@ -1,10 +1,10 @@
-# Auto status (ops_report.py) — 2026-11-09 01:10 UTC
+# Auto status (ops_report.py) — 2026-11-09 01:45 UTC
 
 ## Pinterest (pins.csv)
-- Строк 521: new 246, published 193, ready 75, scheduled 7
-- Неопубликованных информационных (new+ready): 229; хватит до 2026-12-11; до 2027-01-14 докупить ≈ 259
-- Неопубликованных промо (new+ready): 92; хватит до 2026-12-24; до 2027-01-14 докупить ≈ 46
-- Запас информационных: 32 дн. → в норме
+- Строк 521: new 237, published 200, ready 76, scheduled 8
+- Неопубликованных информационных (new+ready): 223; хватит до 2026-12-10; до 2027-01-14 докупить ≈ 265
+- Неопубликованных промо (new+ready): 90; хватит до 2026-12-23; до 2027-01-14 докупить ≈ 48
+- Запас информационных: 31 дн. → в норме
 - lint pins.csv: замечаний нет
 - Строк new со сдвинутыми колонками (служебные поля заполнены): 0
 - Описаний с фразой-добивкой «small visible step»: 0
@@ -19,7 +19,9 @@
 - Отклонённых строк нет
 
 ## Последние запуски Actions
-- 11-09T01:10 Ops report: in_progress
+- 11-09T01:45 Ops report: in_progress
+- 11-09T01:42 Daily pins: success
+- 11-09T01:10 Ops report: success
 - 11-09T01:10 Autopilot: success
 - 11-08T18:21 Ops report: success
 - 11-08T18:20 Merge pins batch: success
@@ -27,5 +29,3 @@
 - 11-08T18:16 Merge pins batch: success
 - 11-08T11:28 Ops report: success
 - 11-08T10:41 Ops report: success
-- 11-08T10:40 Daily pins: success
-- 11-08T09:35 Ops report: success
