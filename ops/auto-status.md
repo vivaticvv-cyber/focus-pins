@@ -1,4 +1,4 @@
-# Auto status (ops_report.py) — 2026-11-09 11:58 UTC
+# Auto status (ops_report.py) — 2026-11-09 13:17 UTC
 
 ## Pinterest (pins.csv)
 - Строк 521: new 236, published 203, ready 77, scheduled 5
@@ -19,7 +19,8 @@
 - Отклонённых строк нет
 
 ## Последние запуски Actions
-- 11-09T11:58 Ops report: in_progress
+- 11-09T13:17 Ops report: in_progress
+- 11-09T11:58 Ops report: success
 - 11-09T11:57 Daily pins: success
 - 11-09T10:26 Ops report: success
 - 11-09T10:26 Autopilot: success
@@ -28,4 +29,3 @@
 - 11-09T01:10 Ops report: success
 - 11-09T01:10 Autopilot: success
 - 11-08T18:21 Ops report: success
-- 11-08T18:20 Merge pins batch: success
