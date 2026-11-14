@@ -1,7 +1,7 @@
-# Auto status (ops_report.py) — 2026-11-14 09:31 UTC
+# Auto status (ops_report.py) — 2026-11-14 10:47 UTC
 
 ## Pinterest (pins.csv)
-- Строк 521: new 195, published 247, ready 69, scheduled 10
+- Строк 521: new 194, published 249, ready 70, scheduled 8
 - Неопубликованных информационных (new+ready): 186; хватит до 2026-12-10; до 2027-01-14 докупить ≈ 264
 - Неопубликованных промо (new+ready): 78; хватит до 2026-12-22; до 2027-01-14 докупить ≈ 49
 - Запас информационных: 26 дн. → в норме
@@ -19,7 +19,9 @@
 - Отклонённых строк нет
 
 ## Последние запуски Actions
-- 11-14T09:31 Ops report: in_progress
+- 11-14T10:47 Ops report: in_progress
+- 11-14T10:46 Daily pins: success
+- 11-14T09:31 Ops report: success
 - 11-14T09:31 Autopilot: success
 - 11-14T02:25 Ops report: success
 - 11-14T02:23 Daily pins: success
@@ -27,5 +29,3 @@
 - 11-14T01:42 Autopilot: success
 - 11-13T12:32 Ops report: success
 - 11-13T11:24 Ops report: success
-- 11-13T11:23 Daily pins: success
-- 11-13T10:05 Ops report: success
