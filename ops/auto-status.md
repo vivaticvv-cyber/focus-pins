@@ -1,4 +1,4 @@
-# Auto status (ops_report.py) — 2026-11-18 02:48 UTC
+# Auto status (ops_report.py) — 2026-11-18 03:08 UTC
 
 ## Pinterest (pins.csv)
 - Строк 528: new 172, published 280, ready 71, scheduled 5
@@ -10,22 +10,23 @@
 - Описаний с фразой-добивкой «small visible step»: 0
 
 ## Facebook/X (social.csv)
-- S (Facebook, Buffer): ready 25 (без картинки: 0), new 0, scheduled/published 9
-- SX (X, Buffer): ready 51 (без картинки: 0), new 11, scheduled/published 19
+- S (Facebook, Buffer): ready 24 (без картинки: 0), new 0, scheduled/published 10
+- SX (X, Buffer): ready 56 (без картинки: 0), new 5, scheduled/published 20
 - M (Facebook, Metricool): ready 60 (без картинки: 0), new 0, scheduled/published 0
 
 ## Партии
-- Файлов в корне, ждущих слияния: нет
+- Файлов в корне, ждущих слияния: pins_batch_19_fix.csv
 - Отклонённые строки: rejected_pins_batch_19.csv → id 523, 526, 530 (нужно исправить и отправить как *_fix.csv)
+- Отклонённые строки: rejected_pins_batch_19_fix.csv → id 523, 526, 530 (нужно исправить и отправить как *_fix.csv)
 
 ## Последние запуски Actions
-- 11-18T02:48 Ops report: pending
-- 11-18T02:48 Ops report: in_progress
+- 11-18T03:07 Ops report: in_progress
+- 11-18T03:06 Autopilot: success
+- 11-18T02:48 Ops report: success
+- 11-18T02:48 Ops report: success
 - 11-18T02:48 Merge pins batch: success
 - 11-18T02:47 Merge pins batch: success
 - 11-17T13:46 Ops report: success
 - 11-17T12:19 Ops report: success
 - 11-17T12:18 Daily pins: success
 - 11-17T11:16 Ops report: success
-- 11-17T11:14 Autopilot: success
-- 11-17T04:29 Ops report: success
