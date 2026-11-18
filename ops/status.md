@@ -1,16 +1,16 @@
 # FOCUS ops status
 
-**Updated:** 2026-11-17 ~04:40 Kyiv (Grok)
+**Updated:** 2026-11-18 ~04:50 Kyiv (Grok)
 
 ## STATUS: DONE
 
-pins=521. Root чист. Отказов 0. Запас info 24 дн. (>21). Daily pins и Autopilot зелёные.
+pins=531. Root чист. Отказов 0. Запас info ~25 дн. (>21). Daily pins и Autopilot зелёные. Batch 19 (522-531) merged.
 
 ### Numbers
-- pins.csv: 521
-- Инфо неопубликованных (new+ready): 172, запас 24 дн.
+- pins.csv: 531
+- Инфо неопубликованных (new+ready): ~182, запас ~25 дн.
 - Промо неопубл.: 73
-- Next batch due: **2026-11-18**
+- Next batch due: **2026-11-25**
 - MAX_PER_DAY = 10
 
 ### BF30
