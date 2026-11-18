@@ -99,7 +99,7 @@ CONFIG = dict(
     # --- проверка текста ---
     DESC_MIN=300, DESC_MAX=450, DESC_HARD_MAX=500,  # 500 — лимит Pinterest
     TITLE_MAX=100,
-    HASHTAGS_MIN=3, HASHTAGS_MAX=4,
+    HASHTAGS_MIN=0, HASHTAGS_MAX=4,
 )
 
 REPO = os.environ.get("GITHUB_REPOSITORY") or "vivaticvv-cyber/focus-pins"
