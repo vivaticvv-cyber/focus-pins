@@ -1,6 +1,6 @@
 # FOCUS — Source of Truth (единый актуальный снимок проекта)
 
-**Обновлено:** 18 ноября 2026, ~16:15 EET (Grok)  
+**Обновлено:** 20 ноября 2026, ~10:05 EET (Grok)  
 **Назначение:** единый источник правды для Grok и Claude.  
 Claude: при получении этого файла или ссылки на него в репозитории — синхронизируй свои project docs / memory / handoff с ним. Не спрашивай владельца то, что уже здесь. При расхождении приоритет у этого файла + живой `ops/status.md` / `ops/auto-status.md` в репо.
 
@@ -32,22 +32,29 @@ Claude: при получении этого файла или ссылки на
 60–70 % новых пинов → free Starter или $5 Soft Structure Printable.  
 Остальное — tips с мягким мостом на free.
 
+**LINKS fallback в publish.py (с 20.11.2026):**  
+- info: Starter 55 / Soft Structure $5 25 / pages.dev 12 / dwshkr 8  
+- promo: Starter 40 / Soft Structure $5 40 / seqen 12 / pages.dev 8  
+Явная ссылка в CSV всегда побеждает fallback.
+
 Workflows (email follow-up): Starter workflow в DRAFT (нужно ≥$100 earnings + payout, чтобы Publish). Mini deferred.
 
 ---
 
-## 3. Текущий статус (18.11.2026, после fix batch_20)
+## 3. Текущий статус (20.11.2026)
 
 **Pinterest / pins.csv**
-- Строк: **560** (после pins_batch_20_fix: +32, ids 532–567 без 4 дублей)
-- Статусы (на момент Claude/ops ~12:21 UTC): published 288, new 195, ready 70, scheduled 7
-- Info неопубликованных: 183 → хватит до ~13.12 (≈25 дн., норма); до 14.01 докупить ≈237
-- Промо: 82 → хватит до ~28.12; до 14.01 докупить ≈37
+- Строк: **560**
+- Статусы (ops/auto-status 20.11 ~03:10 UTC): published 303, new 177, ready 71, scheduled 9
+- Неопубликованных info (new+ready): 170 → хватит до ~13.12 (≈23–24 дн., норма)
+- Промо (new+ready): 78 → хватит до ~28.12
+- Пустой `link` среди new+ready: **83** (на них действует новый LINKS fallback)
 - Next batch due: **2026-11-25**
-- Root чист, 0 ложных rejects (intentional title-dupe rejects удалены 18.11)
+- Root чист, 0 rejects
 - Daily + Autopilot зелёные
 - CHANNEL_ID: `6aeb6ecfe29c69a17160459d`
 - 10 досок, altText включён, NEW_BOARD_SHARE=0.5
+- HASHTAGS_MIN=0, HASHTAGS_MAX=4 (не менять)
 
 **BF30 (Black Friday soft)**
 - Soft: 8–15.11 (max 2) — завершён
@@ -83,7 +90,7 @@ Workflows (email follow-up): Starter workflow в DRAFT (нужно ≥$100 earni
 1. Сверить **все** title и pin_title новой партии со всем pins.csv (включая status=new и ready). merge_batch.py отклоняет дубли title/description.
 2. Локально: `python publish.py --lint` на копии + тестовый merge_batch.py.
 3. После Merge pins batch смотреть **batches/_report.md** («принято N, отклонено M»), а не только зелёный статус Actions. Если M>0 — чинить и слать *_fix.csv.
-4. Для LINKS fallback патча 20.11 и любых правок publish.py: брать **текущий** файл из репо (main), не локальную устаревшую копию.
+4. Для любых правок publish.py: брать **текущий** файл из репо (main), не локальную устаревшую копию.
 
 Эти правила применяются ко **всем** будущим `pins_batch_*.csv`. Автоматизации Grok обязаны их соблюдать.
 
@@ -98,7 +105,7 @@ Workflows (email follow-up): Starter workflow в DRAFT (нужно ≥$100 earni
 | FOCUS-sales-strategy-2026-10-31.md | artifacts | Стратегия продаж |
 | FOCUS-claude-note-2026-11-18.md | репо (рядом с 16.11) | Разбор batch_20 reject + фиксы |
 | ops/status.md + ops/auto-status.md | **репо** | Живой STATUS / числа |
-| publish.py | репо | HASHTAGS_MIN=0, MAX=4; LINKS fallback ещё старый (патч 20.11) |
+| publish.py | репо | HASHTAGS_MIN=0, MAX=4; LINKS fallback = Starter+$5 (с 20.11) |
 
 ---
 
@@ -122,26 +129,26 @@ Workflows (email follow-up): Starter workflow в DRAFT (нужно ≥$100 earni
 
 ## 8. Ближайшие действия (приоритет)
 
-1. **19.11** — проверить, что у 532–567 появились images/N.jpg (Daily pins), нет сбоев генерации / квоты Workers AI.
-2. **20.11** — LINKS fallback patch в publish.py (приоритет free Starter + $5 Soft Structure). База = текущий main.
-3. **22.11** — черновик оптимизации страниц Gumroad.
-4. **26.11 10:00 Kyiv** — инструкция: 1 новая доска + 4–6 ручных BF-пинов + снижение авто до 4–6 (итого 8–12).
-5. Поддерживать запас info >21 дня.
-6. После первых $100 earnings — Publish Starter workflow.
+1. **20.11** — LINKS fallback patch в publish.py (DONE: приоритет free Starter + $5 Soft Structure).
+2. **22.11** — черновик оптимизации страниц Gumroad.
+3. **26.11 10:00 Kyiv** — инструкция: 1 новая доска + 4–6 ручных BF-пинов + снижение авто до 4–6 (итого 8–12).
+4. Поддерживать запас info >21 дня.
+5. После первых $100 earnings — Publish Starter workflow.
+6. Next pin batch due **2026-11-25**.
 
 ---
 
 ## 9. Инструкция для Claude (копировать)
 
 ```
-Синхронизируй все свои project documents / memory / handoff по FOCUS с файлом FOCUS-source-of-truth.md (актуальная версия от Grok, 18.11.2026 или новее).
+Синхронизируй все свои project documents / memory / handoff по FOCUS с файлом FOCUS-source-of-truth.md (актуальная версия от Grok, 20.11.2026 или новее).
 
 Это единый source of truth. 
-- Обнови статус pins=560, batch_20_fix принят, intentional rejects удалены.
+- Обнови статус pins=560, LINKS fallback обновлён (Starter+$5).
 - Hashtags: цель 0–2 для новых, lint 0–4. Не возвращать MIN=3.
 - Предпроверка title vs весь pins.csv обязательна.
 - Прочитай FOCUS-claude-note-2026-11-18.md (разбор инцидента).
-- Ближайшее: 19.11 images check, 20.11 LINKS, 22.11 Gumroad draft, 26.11 BF board.
+- Ближайшее: 22.11 Gumroad draft, 26.11 BF board, batch due 25.11.
 - При расхождении приоритет у source-of-truth + живые ops/* в репозитории.
 ```
 

@@ -90,10 +90,20 @@ CONFIG = dict(
     # --- доски ---
     PROMO_MIN_GAP=3,                                # между двумя промо-пинами минимум 3 обычных (до ~1 из 4)
 
-    # --- ссылки: (url, вес) по типу доски. Итого ≈ 70% pages.dev / ≈ 23% dwshkr / ≈ 7% seqen ---
+    # --- ссылки: (url, вес) по типу доски. Приоритет free Starter + $5 Soft Structure (2026-11-20) ---
     LINKS={
-        "info": [("https://focus-mini.pages.dev/", 74), ("https://vivatic.gumroad.com/l/dwshkr", 26)],
-        "promo": [("https://focus-mini.pages.dev/", 45), ("https://vivatic.gumroad.com/l/seqen", 55)],
+        "info": [
+            ("https://vivatic.gumroad.com/l/focus-starter", 55),
+            ("https://vivatic.gumroad.com/l/soft-structure-printable", 25),
+            ("https://focus-mini.pages.dev/", 12),
+            ("https://vivatic.gumroad.com/l/dwshkr", 8),
+        ],
+        "promo": [
+            ("https://vivatic.gumroad.com/l/focus-starter", 40),
+            ("https://vivatic.gumroad.com/l/soft-structure-printable", 40),
+            ("https://vivatic.gumroad.com/l/seqen", 12),
+            ("https://focus-mini.pages.dev/", 8),
+        ],
     },
 
     # --- проверка текста ---
