@@ -1,6 +1,6 @@
 # FOCUS — Source of Truth (единый актуальный снимок проекта)
 
-**Обновлено:** 20 ноября 2026, ~10:05 EET (Grok)  
+**Обновлено:** 21 ноября 2026, ~11:15 EET (Grok)  
 **Назначение:** единый источник правды для Grok и Claude.  
 Claude: при получении этого файла или ссылки на него в репозитории — синхронизируй свои project docs / memory / handoff с ним. Не спрашивай владельца то, что уже здесь. При расхождении приоритет у этого файла + живой `ops/status.md` / `ops/auto-status.md` в репо.
 
@@ -41,27 +41,27 @@ Workflows (email follow-up): Starter workflow в DRAFT (нужно ≥$100 earni
 
 ---
 
-## 3. Текущий статус (20.11.2026)
+## 3. Текущий статус (21.11.2026)
 
 **Pinterest / pins.csv**
 - Строк: **560**
-- Статусы (ops/auto-status 20.11 ~03:10 UTC): published 303, new 177, ready 71, scheduled 9
-- Неопубликованных info (new+ready): 170 → хватит до ~13.12 (≈23–24 дн., норма)
-- Промо (new+ready): 78 → хватит до ~28.12
-- Пустой `link` среди new+ready: **83** (на них действует новый LINKS fallback)
+- Статусы (ops/auto-status 21.11 03:13 UTC): published 312, new 170, ready 68, scheduled 10
+- Неопубликованных info (new+ready): 163 → хватит до ~14.12 (≈23 дн., норма)
+- Промо (new+ready): 75 → хватит до ~27.12
 - Next batch due: **2026-11-25**
-- Root чист, 0 rejects
-- Daily + Autopilot зелёные
+- Root чист, 0 rejects, lint без замечаний
+- Daily #115 + Autopilot #108 + Ops report зелёные (21.11)
 - CHANNEL_ID: `6aeb6ecfe29c69a17160459d`
 - 10 досок, altText включён, NEW_BOARD_SHARE=0.5
 - HASHTAGS_MIN=0, HASHTAGS_MAX=4 (не менять)
 
 **BF30 (Black Friday soft)**
 - Soft: 8–15.11 (max 2) — завершён
-- Warm: 16–25.11 (max 5 всего) — сейчас
+- Warm: 16–25.11 (max 5 всего) — сейчас (опубликовано 5 BF-пинов)
 - Active: 26–30.11
 - Тон: код + даты вместе, без FOMO
-- Date-filter в publish.py не внедрён (риск); мониторим очередь
+- **Date-filter в publish.py ЕСТЬ** (BF_WINDOW 08–30.11, bf_allowed(), bf_cum() с фазами soft→warm→active). Документы handoff/brief раньше ошибочно писали «нет».
+- Окно рекламы до 30.11; акция на Gumroad до 01.12 10:00 — нормально.
 
 **SEO / GSC**
 - Главная (`/`) проиндексирована с 26.10.2026.
@@ -71,6 +71,11 @@ Workflows (email follow-up): Starter workflow в DRAFT (нужно ≥$100 earni
 **Метрики (последний полный срез 31.10)**
 - Paid sales = 0 (1 free trial = owner test)
 - Главный разрыв был: низкий охват + почти нулевые saves → стратегия = list-пины + free/$5 + SEO
+
+**Очередь / приоритет (проверка 21.11)**
+- Партия ids ≥529 (SEO free Starter / $5 от 18.11) стоит в хвосте: choose_pins и generation_order берут по возрастанию id (после приоритета новых досок). Выйдут ближе к середине декабря.
+- Product-mockup в неопубликованной очереди почти нет (цель 40–50 % в следующей партии).
+- На 26.11: Daily cron 22:17 UTC 25.11 уже планирует пины на 26.11. Снижение авто до 4–6 нужно внести до этого момента (MAX_PER_DAY variable или ручное удаление лишних из Buffer + возврат status=ready).
 
 ---
 
@@ -103,9 +108,10 @@ Workflows (email follow-up): Starter workflow в DRAFT (нужно ≥$100 earni
 | FOCUS-source-of-truth.md | репо root + artifacts | Единый снимок |
 | FOCUS-pinterest-seo-rules.md | репо + artifacts | Полные SEO-правила |
 | FOCUS-sales-strategy-2026-10-31.md | artifacts | Стратегия продаж |
-| FOCUS-claude-note-2026-11-18.md | репо (рядом с 16.11) | Разбор batch_20 reject + фиксы |
+| FOCUS-claude-note-2026-11-18.md | репо | Разбор batch_20 reject + фиксы |
+| FOCUS-claude-note-2026-11-21.md | artifacts / рядом с 18.11 | Проверка очереди, product-mockup, 26.11, BF-filter |
 | ops/status.md + ops/auto-status.md | **репо** | Живой STATUS / числа |
-| publish.py | репо | HASHTAGS_MIN=0, MAX=4; LINKS fallback = Starter+$5 (с 20.11) |
+| publish.py | репо | HASHTAGS_MIN=0, MAX=4; LINKS fallback = Starter+$5 (с 20.11); BF date-filter live |
 
 ---
 
@@ -129,26 +135,31 @@ Workflows (email follow-up): Starter workflow в DRAFT (нужно ≥$100 earni
 
 ## 8. Ближайшие действия (приоритет)
 
-1. **20.11** — LINKS fallback patch в publish.py (DONE: приоритет free Starter + $5 Soft Structure).
-2. **22.11** — черновик оптимизации страниц Gumroad.
-3. **26.11 10:00 Kyiv** — инструкция: 1 новая доска + 4–6 ручных BF-пинов + снижение авто до 4–6 (итого 8–12).
-4. Поддерживать запас info >21 дня.
-5. После первых $100 earnings — Publish Starter workflow.
-6. Next pin batch due **2026-11-25**.
+1. **20.11** — LINKS fallback patch в publish.py (DONE).
+2. **22.11** — черновик оптимизации страниц Gumroad (Grok).
+3. **25.11** — партия ≥30–40 пинов: 40–50 % product-mockup, 60–70 % free Starter / $5, сильные Free CTA, 0–2 hashtags, title-dedup.
+4. **25.11 вечер (до 22:17 UTC)** — снизить авто-пины на 26.11 до 4–6 (MAX_PER_DAY variable или удаление лишних из Buffer после планирования + status=ready).
+5. **26.11 10:00 Kyiv** — инструкция владельцу: 1 новая тематическая доска + 4–6 ручных BF-пинов (итого 8–12). Доску не удалять.
+6. Поддерживать запас info >21 дня.
+7. После первых $100 earnings — Publish Starter workflow.
 
 ---
 
 ## 9. Инструкция для Claude (копировать)
 
 ```
-Синхронизируй все свои project documents / memory / handoff по FOCUS с файлом FOCUS-source-of-truth.md (актуальная версия от Grok, 20.11.2026 или новее).
+Синхронизируй все свои project documents / memory / handoff по FOCUS с файлом FOCUS-source-of-truth.md (актуальная версия от Grok, 21.11.2026 или новее).
 
 Это единый source of truth. 
-- Обнови статус pins=560, LINKS fallback обновлён (Starter+$5).
+- Статус 21.11: pins=560, stock 23d, published 312 / new 170 / ready 68 / scheduled 10. Daily+Autopilot+Ops green.
+- LINKS fallback live (Starter+$5).
+- BF date-filter в publish.py УЖЕ ЕСТЬ (BF_WINDOW, bf_allowed, bf_cum). Старые handoff/brief ошибочно писали «нет».
 - Hashtags: цель 0–2 для новых, lint 0–4. Не возвращать MIN=3.
 - Предпроверка title vs весь pins.csv обязательна.
-- Прочитай FOCUS-claude-note-2026-11-18.md (разбор инцидента).
-- Ближайшее: 22.11 Gumroad draft, 26.11 BF board, batch due 25.11.
+- Партия ≥529 в хвосте очереди (по id). Product-mockup почти нет — в партии 25.11 нужно 40–50 %.
+- 26.11: риск, что Daily 22:17 UTC 25.11 уже запланирует полный день. Снижение до 4–6 нужно до этого.
+- Прочитай FOCUS-claude-note-2026-11-21.md (если есть в репо/artifacts).
+- Ближайшее: 22.11 Gumroad draft, 25.11 batch + снижение, 26.11 BF board.
 - При расхождении приоритет у source-of-truth + живые ops/* в репозитории.
 ```
 
