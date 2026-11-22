@@ -1,15 +1,15 @@
 # FOCUS ops status
 
-**Updated:** 2026-11-21 ~04:40 Kyiv (Grok daily)
+**Updated:** 2026-11-22 ~04:40 Kyiv (Grok daily)
 
 ## STATUS: DONE
 
-pins=560. Root clean. Info stock 23d (>21). Daily + Autopilot + Ops report green. 0 rejects. Next batch due 2026-11-25.
+pins=560. Root clean. Info stock 22d (>21). Daily + Autopilot + Ops report green. 0 rejects. Next batch due 2026-11-25.
 
 ### Numbers
 - pins.csv: 560 rows
-- Info unpublished (new+ready): 170, stock 23d (to ~13.12)
-- Promo unpublished: 78
+- Info unpublished (new+ready): 155, stock 22d (to ~14.12)
+- Promo unpublished: 73
 - Next batch due: **2026-11-25**
 - MAX_PER_DAY = 10
 
