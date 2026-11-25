@@ -339,3 +339,6 @@
 ## 2026-11-25 08:57 UTC
 - pins_batch_22_fix.csv: принято 5, отклонено 1 → batches/rejected_pins_batch_22_fix.csv
   - id 610: пин 610: описание повторяет надпись на картинке (title)
+
+## 2026-11-25 09:02 UTC
+- pins_batch_22_fix2.csv: принято 1, отклонено 0
