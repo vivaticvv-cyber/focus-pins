@@ -1,10 +1,10 @@
 # FOCUS ops status
 
-**Updated:** 2026-11-25 ~05:50 Kyiv (Grok insurance)
+**Updated:** 2026-11-25 ~06:50 Kyiv (Grok insurance)
 
 ## STATUS: TODO
 
-pins=560. Root has pins_batch_21.csv (uploaded). Info stock 21d (=21). Daily + Autopilot + Ops report green. 0 rejects. Next batch due 2026-11-25 (batch 21 uploaded, Merge pending).
+pins=560. pins_batch_21.csv rejected (all 24: descriptions <300 chars). Root clean. pins_batch_21_fix.csv uploaded (descriptions expanded to 300-450, scene fixed, quoted). Merge pending on fix. Info stock 21d. Daily + Autopilot + Ops green. Next batch due 2026-11-25.
 
 ### Numbers
 - pins.csv: 560 rows
@@ -22,4 +22,4 @@ pins=560. Root has pins_batch_21.csv (uploaded). Info stock 21d (=21). Daily + A
 - Ongoing as planned
 
 ### NEED
-- Trigger Merge pins batch on pins_batch_21.csv (24 pins, 62% free Starter, 0 hashtags, quoted). After merge read batches/_report.md.
+- Trigger Merge pins batch on pins_batch_21_fix.csv. After merge read batches/_report.md. If accepted, stock will rise.
