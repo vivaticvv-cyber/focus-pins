@@ -1,10 +1,10 @@
-# Auto status (ops_report.py) — 2026-11-25 04:54 UTC
+# Auto status (ops_report.py) — 2026-11-25 08:51 UTC
 
 ## Pinterest (pins.csv)
-- Строк 584: new 156, published 351, ready 67, scheduled 10
-- Неопубликованных информационных (new+ready): 142; хватит до 2026-12-15; до 2027-01-14 докупить ≈ 227
-- Неопубликованных промо (new+ready): 81; хватит до 2027-01-03; до 2027-01-14 докупить ≈ 23
-- Запас информационных: 20 дн. → в норме
+- Строк 608: new 180, published 351, ready 67, scheduled 10
+- Неопубликованных информационных (new+ready): 153; хватит до 2026-12-16; до 2027-01-14 докупить ≈ 216
+- Неопубликованных промо (new+ready): 94; хватит до 2027-01-10; до 2027-01-14 докупить ≈ 10
+- Запас информационных: 21 дн. → в норме
 - lint pins.csv: замечаний нет
 - Строк new со сдвинутыми колонками (служебные поля заполнены): 0
 - Описаний с фразой-добивкой «small visible step»: 0
@@ -16,16 +16,16 @@
 
 ## Партии
 - Файлов в корне, ждущих слияния: нет
-- Отклонённых строк нет
+- Отклонённые строки: rejected_pins_batch_22.csv → id 598, 607, 610, 615, 618, 621 (нужно исправить и отправить как *_fix.csv)
 
 ## Последние запуски Actions
-- 11-25T04:54 Ops report: in_progress
+- 11-25T08:50 Merge pins batch: queued
+- 11-25T08:50 Ops report: in_progress
+- 11-25T08:50 Merge pins batch: success
+- 11-25T04:54 Ops report: success
 - 11-25T04:52 Daily pins: success
 - 11-25T04:51 Ops report: success
 - 11-25T04:50 Merge pins batch: success
 - 11-25T04:49 Ops report: success
 - 11-25T04:49 Merge pins batch: success
 - 11-25T04:45 Ops report: success
-- 11-25T04:45 Merge pins batch: success
-- 11-25T04:32 Ops report: success
-- 11-25T04:32 Autopilot: success
