@@ -1,10 +1,10 @@
 # FOCUS ops status
 
-**Updated:** 2026-11-25 ~04:40 Kyiv (Grok daily)
+**Updated:** 2026-11-25 ~04:50 Kyiv (Grok insurance)
 
-## STATUS: IN PROGRESS
+## STATUS: TODO
 
-pins=560. Root clean. Info stock 21d (=21). Daily + Autopilot + Ops report green. 0 rejects. Next batch due 2026-11-25 (batch 21 prepared, merge pending).
+pins=560. Root clean. Info stock 21d (=21). Daily + Autopilot + Ops report green. 0 rejects. Next batch due 2026-11-25 (batch 21 prepared, merge pending — full pins_batch_21.csv ready, upload + Merge needed).
 
 ### Numbers
 - pins.csv: 560 rows
@@ -22,4 +22,4 @@ pins=560. Root clean. Info stock 21d (=21). Daily + Autopilot + Ops report green
 - Ongoing as planned
 
 ### NEED
-- None.
+- Upload full pins_batch_21.csv to root + trigger Merge pins batch.
